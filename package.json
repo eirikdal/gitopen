@@ -1,8 +1,13 @@
 {
   "name": "gitopen",
   "version": "0.0.0",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
+      "express": "3.x",
+      "socket.io": "0.9.x",
+      "mongodb": "*",
+      "mongoose": "*"
+  },
+    "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-copy": "~0.4.0",
     "grunt-contrib-concat": "~0.1.3",
