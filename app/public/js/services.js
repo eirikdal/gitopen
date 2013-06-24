@@ -6,11 +6,8 @@
 // Demonstrate how to register services
 // In this case it is a simple value service.
 angular.module('myApp.services', ['ngResource'])
-    .factory('GitOpen', function($resource) {
-        return $resource("/api/open");
-    })
-    .factory('Name', function($resource) {
-        return $resource("/api/name");
+    .factory('Contestant', function($resource) {
+        return $resource("/api/contestant/:name");
     })
     .factory('socket', function($rootScope) {
 	    var socket = io.connect();

@@ -1,13 +1,13 @@
 extends layout
 
 block body
-  div(class='ldrbrd-widget',role='widget',data-ng-cloak,data-ng-controller='AppCtrl',role='application',class='test-surface')
+  div(class='ldrbrd-widget')
     h2 Hello {{name}}
     ul.menu
       li
-        a(href='view1') view1
+        a(href='/view1') view1
       li
-        a(href='view2') view2
+        a(href='/view2') view2
 
     div(ng-view)
 
@@ -23,6 +23,7 @@ block body
   script(src='js/controllers.js')
   script(src='js/filters.js')
   script(src='js/directives.js')
+  script(src='underscore/underscore.js')
   script(src='http://code.jquery.com/jquery-1.8.3.js')
   script(src='http://code.jquery.com/ui/1.9.2/jquery-ui.js')
   script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js')

@@ -3,22 +3,33 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['myApp.services']).
-    controller('AppCtrl',function ($scope, socket, GitOpen, Name) {
+    controller('AppCtrl',function ($scope, socket, Contestant) {
         $scope.contestants = [];
 
+        $scope.addScore = function() {
+            var contestant = Contestant.get({name:"foo"}, function() {
+                contestant.score += 1;
+                contestant.$save({name:"foo"});
+            });
+        };
+
+        console.log('listContestants')
         socket.emit('listContestants');
 
         // Incoming
         socket.on('onContestantsListed', function (data) {
-            $scope.contestants.push.apply($scope.contestants, data);
+            console.log('onContestantsListed')
+            $scope.contestants = data;
         });
 
         socket.on('onContestantCreated', function (data) {
             $scope.contestants.push(data);
         });
 
-        socket.on('onContestantDeleted', function (data) {
-            $scope.handleDeleteContestant(data.id);
+        socket.on('onContestantUpdated', function (data) {
+            var contestant = _.findWhere($scope.contestants, {name: data.name});
+            contestant.score = data.score;
+            console.log('onContestantUpdated')
         });
 
         var _resetFormValidation = function () {
@@ -31,8 +42,7 @@ angular.module('myApp.controllers', ['myApp.services']).
         // Outgoing
         $scope.createContestant = function (display_name, score) {
             var contestant = {
-                id: new Date().getTime(),
-                display_name: display_name,
+                name: display_name,
                 score: Number(score)
             };
 
@@ -42,39 +52,10 @@ angular.module('myApp.controllers', ['myApp.services']).
             _resetFormValidation();
         };
 
-        $scope.deleteContestant = function (id) {
-            $scope.handleDeleteContestant(id);
-
-            socket.emit('deleteContestant', {id: id});
-        };
-
-        $scope.handleDeleteContestant = function (id) {
-            console.log('HANDLE DELETE CONTESTANT', id);
-
-            var oldContestants = $scope.contestants,
-                newContestants = [];
-
-            angular.forEach(oldContestants, function (contestant) {
-                if (contestant.id !== id) {
-                    newContestants.push(contestant);
-                }
-            });
-
-            $scope.contestants = newContestants;
-        }
-        GitOpen.get(function (resp) {
-
+        $scope.$on('$destroy', function (event) {
+            console.log('removing listeners')
+            socket.removeAllListeners();
+            // or something like
+            // socket.removeListener(this);
         });
-
-        Name.get({name: "foo"}, function (resp) {
-            $scope.name = resp.name;
-        });
-    }).
-    controller('MyCtrl1',function ($scope) {
-        // write Ctrl here
-
-    }).
-    controller('MyCtrl2', function ($scope) {
-        // write Ctrl here
-
     });
