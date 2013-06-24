@@ -29,3 +29,7 @@ exports.findAllContestants = function (req, res) {
         res.json(contestants);
     });
 };
+
+exports.newCommit = function(req, res) {
+    console.log(req.body);
+}

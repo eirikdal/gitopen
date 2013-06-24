@@ -36,6 +36,7 @@ app.get('/api/contestant', api.findAllContestants);
 app.get('/api/contestant/:name', api.findContestantByName);
 app.post('/api/contestant/:name', api.updateContestant);
 app.post('/api/contestant', api.addContestant);
+app.post('/api/gitshow', api.newCommit)
 
 // redirect all others to the index (HTML5 history)
 //app.get('*', routes.index);
