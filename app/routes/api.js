@@ -31,5 +31,8 @@ exports.findAllContestants = function (req, res) {
 };
 
 exports.newCommit = function(req, res) {
-    console.log(req.body);
+    mongodb.update({name:"foo", score: 1}, function (resp) {
+        app.notify('onContestantUpdated', resp);
+        res.json(resp);
+    });
 }
