@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8c9f7fe-0fdc-4396-bedd-b01db76a9afb" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/adsf.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out.diff" afterPath="$PROJECT_DIR$/out.diff" />
     </list>
     <ignored path="gitopen.iws" />
     <ignored path=".idea/workspace.xml" />
