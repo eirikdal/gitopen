@@ -7,6 +7,6 @@ var RegexStream = require('regex-stream')
 
 // pipe data from input file to the regexStream parser to stdout
 exports.parse = function(input) {
-    readableStream.pipe(input, regexStream)
-    readableStream.pipe(regexStream, process.stdout)
+    var newLines = input.match(/^(?!\+\+\+$)\+$/);
+    console.log(newLines)
 }
