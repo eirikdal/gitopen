@@ -1,6 +1,5 @@
 var util = require('util')
     , RegexStream = require('regex-stream')
-    , input = require('fs').createReadStream('./data.txt', {encoding:'utf-8'})
     , parser = {
         "regex": "^([\\S]+) ([\\S]+) ([\\S]+)"
         , "labels": ["A label", "B label", "C label"]
