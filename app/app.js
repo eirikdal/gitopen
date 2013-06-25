@@ -36,6 +36,7 @@ app.get('/api/contestant', api.findAllContestants);
 app.get('/api/contestant/:name', api.findContestantByName);
 app.post('/api/contestant/:name', api.updateContestant);
 app.post('/api/contestant', api.addContestant);
+app.post('/api/gitshow', api.newCommit)
 
 // redirect all others to the index (HTML5 history)
 //app.get('*', routes.index);
@@ -51,11 +52,14 @@ server.listen(3000, function(){
 
 mongodb.setup();
 
-io.sockets.on('connection', function(socket) {
-    exports.notify = function(handle, data) {
-        socket.emit(handle, data);
-    };
 
+exports.notify = function(handle, data) {
+    io.sockets.on('connection', function(socket) {
+        socket.emit(handle, data);
+    })
+}
+
+io.sockets.on('connection', function(socket) {
     socket.on('listContestants', function(data) {
         mongodb.listContestants(function(contestants) {
             socket.emit('onContestantsListed', contestants);

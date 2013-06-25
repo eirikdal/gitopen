@@ -2,7 +2,8 @@
  * Serve JSON to our AngularJS client
  */
 var app = require('../app'),
-    mongodb = require('../public/js/mongodb');
+    mongodb = require('../public/js/mongodb'),
+    diff = require('../server/diff.js');
 
 exports.addContestant = function (req, res) {
     var contestant = new Contestant({name: req.params.name, score: 0});
@@ -29,3 +30,12 @@ exports.findAllContestants = function (req, res) {
         res.json(contestants);
     });
 };
+
+exports.newCommit = function(req, res) {
+    diff.parse(req.body);
+
+    mongodb.update({name:"foo", score: 3}, function (resp) {
+        app.notify('onContestantUpdated', resp);
+        res.json(resp);
+    });
+}
