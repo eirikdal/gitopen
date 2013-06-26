@@ -52,14 +52,15 @@ server.listen(3000, function(){
 
 mongodb.setup();
 
-
+var _socket;
 exports.notify = function(handle, data) {
-    io.sockets.on('connection', function(socket) {
-        socket.emit(handle, data);
-    })
+    console.log(handle)
+    _socket.emit(handle, data);
 }
 
 io.sockets.on('connection', function(socket) {
+    _socket = socket;
+
     socket.on('listContestants', function(data) {
         mongodb.listContestants(function(contestants) {
             socket.emit('onContestantsListed', contestants);
