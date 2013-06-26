@@ -32,10 +32,15 @@ exports.findAllContestants = function (req, res) {
 };
 
 exports.newCommit = function(req, res) {
-    diff.parse(req.body);
-
-    mongodb.update({name:"foo", score: 3}, function (resp) {
-        app.notify('onContestantUpdated', resp);
-        res.json(resp);
+    var results = diff.parse(req.body);
+    mongodb.findByName(results.user, function (err, user) {
+        if (user) {
+            results.score += user.score;
+        }
+        mongodb.update({name: results.user, score: results.score}, function (resp) {
+            console.log('calling notify')
+            app.notify('onContestantUpdated', resp);
+            res.json(resp);
+        });
     });
 }
