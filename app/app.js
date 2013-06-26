@@ -3,20 +3,22 @@
 var express = require('express'),
     routes = require('./routes'),
     api = require('./routes/api'),
-    mongodb = require('./public/js/mongodb.js');
+    mongodb = require('./public/js/mongodb.js'),
+    less = require('less-middleware');
 
 /**
  * Module dependencies.
  */
 var app = module.exports = express();
+var publicDir = __dirname + '/public';
 
 app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.static(__dirname + '/public'));
-    app.use(express.static(__dirname + '/components'));
+    app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    app.use(express.static(publicDir));
     app.use(app.router);
 });
 
