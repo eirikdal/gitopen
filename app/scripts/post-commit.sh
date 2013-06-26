@@ -1,3 +1,4 @@
+
 #!/bin/sh
 #
 # name as post-commit in a .git/hooks directory
@@ -7,9 +8,11 @@
 #
 # To enable this hook, rename this file to "post-commit".
 
-gitout=$(git show | tr \" \')
+IFS="\n"
 
-IFS=$'\n'
+gitshow = $(echo -e | git show)
+
+gitout=$(git show | tr \" \')
 
 lines="["
 
