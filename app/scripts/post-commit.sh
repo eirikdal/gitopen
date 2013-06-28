@@ -8,18 +8,27 @@
 #
 # To enable this hook, rename this file to "post-commit".
 
-IFS="\n"
+IFS=$'\n'
 
 gitshow = $(echo -e | git show)
 
-gitout=$(git show | tr \" \')
+
+gitout=$(git show | tr \' '\u2028')
+gitout=$(echo "$gitout" | tr '"' '\u2028')
+gitout=$(echo "$gitout" | tr '\r' '\u2028')
+gitout=$(echo "$gitout" | tr '\t' '\u2028')
+gitout=$(echo "$gitout" | tr '\v' '\u2028')
+gitout=$(echo "$gitout" | tr '\f' '\u2028')
+gitout=$(echo "$gitout" | tr '\b' '\u2028')
+gitout=$(echo "$gitout" | tr '\' 'a')
+
+echo "$gitout"
 
 lines="["
 
 for item in $gitout
 do
     lines=$lines'"'$item'",'
-    echo "$item"
 done
 lines=${lines%?}
 json='{"diff":'$lines']}'
