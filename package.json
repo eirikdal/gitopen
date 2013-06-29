@@ -5,8 +5,11 @@
       "express": "3.x",
       "socket.io": "0.9.x",
       "mongodb": "*",
+      "jade": "*",
       "mongoose": "*",
-      "regex-stream": "*"
+      "regex-stream": "*",
+      "underscore": "*",
+      "less-middleware": "*"
   },
     "devDependencies": {
     "grunt": "~0.4.1",

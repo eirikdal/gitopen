@@ -3,20 +3,22 @@
 var express = require('express'),
     routes = require('./routes'),
     api = require('./routes/api'),
-    mongodb = require('./public/js/mongodb.js');
+    mongodb = require('./public/js/mongodb.js'),
+    less = require('less-middleware');
 
 /**
  * Module dependencies.
  */
 var app = module.exports = express();
+var publicDir = __dirname + '/public';
 
 app.configure(function(){
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(express.static(__dirname + '/public'));
-    app.use(express.static(__dirname + '/components'));
+    app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    app.use(express.static(publicDir));
     app.use(app.router);
 });
 
@@ -36,7 +38,7 @@ app.get('/api/contestant', api.findAllContestants);
 app.get('/api/contestant/:name', api.findContestantByName);
 app.post('/api/contestant/:name', api.updateContestant);
 app.post('/api/contestant', api.addContestant);
-app.post('/api/gitshow', api.newCommit)
+app.post('/api/gitshow', api.newCommit);
 
 // redirect all others to the index (HTML5 history)
 //app.get('*', routes.index);
@@ -52,10 +54,14 @@ server.listen(3000, function(){
 
 mongodb.setup();
 
+var _socket;
+exports.notify = function(handle, data) {
+    if (_socket)
+        _socket.emit(handle, data);
+}
+
 io.sockets.on('connection', function(socket) {
-    exports.notify = function(handle, data) {
-        socket.emit(handle, data);
-    };
+    _socket = socket;
 
     socket.on('listContestants', function(data) {
         mongodb.listContestants(function(contestants) {

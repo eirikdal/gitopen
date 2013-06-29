@@ -16,9 +16,9 @@ exports.setup = function () {
     Contestant = mongoose.model('Contestant', { name: {type: String, unique: true }, score: Number });
 };
 
-exports.findByName = function(name, callback) {
-    Contestant.findOne({name:name}, callback);
-}
+exports.findByName = function (name, callback) {
+    Contestant.findOne({name: name}, callback);
+};
 
 exports.addContestant = function (name) {
     var contestant = new Contestant({ name: name, score: 0 });
@@ -33,14 +33,14 @@ exports.addScore = function (name, score) {
 
 exports.update = function (body, callback) {
     delete body._id
-    Contestant.findOneAndUpdate({name: body.name}, body, function (err, contestant) {
+    Contestant.findOneAndUpdate({name: body.name}, body, {upsert: true}, function (err, contestant) {
         if (err) {
             console.log("error updating model:" + err);
             return;
         }
         callback(contestant);
     });
-}
+};
 
 exports.listContestants = function (callback) {
     Contestant.find(function (err, contestants) {

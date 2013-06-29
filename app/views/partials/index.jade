@@ -1,0 +1,13 @@
+div(class="container")
+    div(class="row")
+        div(class="span9")
+            h1(class="widget-title") Leaderboard
+            table(class="table table-striped")
+                thead
+                    tr
+                        th Email
+                        th Score
+                tbody
+                    tr(ng-repeat="contestant in contestants | orderBy:'-score'")
+                        td {{contestant.name}}
+                        td {{contestant.score}}
