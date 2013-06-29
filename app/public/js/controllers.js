@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('gitopen.controllers', ['gitopen.services']).
-    controller('IndexCtrl',function ($scope, socket, Contestant) {
+    controller('IndexCtrl',function ($scope, socket, flash) {
         $scope.contestants = [];
 
         socket.emit('listContestants');
@@ -14,10 +14,15 @@ angular.module('gitopen.controllers', ['gitopen.services']).
         });
 
         socket.on('onContestantUpdated', function (data) {
+            flash.pop({title: "New commit", body: "Foo commited", type: "info"});
+
             var contestant = _.findWhere($scope.contestants, {name: data.name});
             if (contestant) {
                 contestant.score = data.score;
+            } else {
+                $scope.contestants.push(data);
             }
+
         });
 
         var _resetFormValidation = function () {

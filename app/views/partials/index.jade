@@ -1,3 +1,6 @@
+div(class="alert alert-block alert-{{flash.get().type}}",ng-show="flash.get().body")
+    h4 {{flash.get().title}}
+    p {{flash.get().body}}
 div(class="container")
     div(class="row")
         div(class="span9")

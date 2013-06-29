@@ -32,6 +32,7 @@ app.configure('production', function(){
 
 // Routes
 app.get('/', routes.index);
+app.get('/clear', routes.clear);
 
 app.get('/partials/:name', routes.partial);
 app.get('/api/contestant', api.findAllContestants);

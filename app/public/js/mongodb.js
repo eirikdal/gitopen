@@ -20,6 +20,10 @@ exports.findByName = function (name, callback) {
     Contestant.findOne({name: name}, callback);
 };
 
+exports.clearContestants = function(callback) {
+    Contestant.remove({}, callback)
+}
+
 exports.addContestant = function (name) {
     var contestant = new Contestant({ name: name, score: 0 });
     save(contestant)

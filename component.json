@@ -10,7 +10,8 @@
     "angular-sanitize": "~1.0.7",
     "angular-socket-io": "*",
     "underscore": "*",
-    "bootstrap": "*"
+    "bootstrap": "*",
+    "toastr": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.5",
