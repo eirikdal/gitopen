@@ -38,7 +38,7 @@ app.get('/api/contestant', api.findAllContestants);
 app.get('/api/contestant/:name', api.findContestantByName);
 app.post('/api/contestant/:name', api.updateContestant);
 app.post('/api/contestant', api.addContestant);
-app.post('/api/gitshow', api.newCommit)
+app.post('/api/gitshow', api.newCommit);
 
 // redirect all others to the index (HTML5 history)
 //app.get('*', routes.index);
@@ -56,8 +56,8 @@ mongodb.setup();
 
 var _socket;
 exports.notify = function(handle, data) {
-    console.log(handle)
-    _socket.emit(handle, data);
+    if (_socket)
+        _socket.emit(handle, data);
 }
 
 io.sockets.on('connection', function(socket) {

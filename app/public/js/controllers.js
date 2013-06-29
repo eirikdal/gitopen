@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['myApp.services']).
-    controller('AppCtrl',function ($scope, socket, Contestant) {
+angular.module('gitopen.controllers', ['gitopen.services']).
+    controller('IndexCtrl',function ($scope, socket, Contestant) {
         $scope.contestants = [];
 
         socket.emit('listContestants');
