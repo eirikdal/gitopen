@@ -10,8 +10,7 @@
 
 IFS=$'\n'
 
-gitshow = $(echo -e | git show)
-
+gitshow=$(echo -e | git show)
 
 gitout=$(git show | tr \' '\u2028')
 gitout=$(echo "$gitout" | tr '"' '\u2028')
@@ -20,7 +19,7 @@ gitout=$(echo "$gitout" | tr '\t' '\u2028')
 gitout=$(echo "$gitout" | tr '\v' '\u2028')
 gitout=$(echo "$gitout" | tr '\f' '\u2028')
 gitout=$(echo "$gitout" | tr '\b' '\u2028')
-gitout=$(echo "$gitout" | tr '\' 'a')
+gitout=$(echo "$gitout" | tr '\\' 'a')
 
 echo "$gitout"
 
@@ -34,4 +33,4 @@ lines=${lines%?}
 json='{"diff":'$lines']}'
 echo "$json" > parsed.diff
 
-curl -v -H "Content-Type: application/json" -X POST -d @parsed.diff http://localhost:3000/api/gitshow
+curl -silent -H "Content-Type: application/json" -X POST -d @parsed.diff http://localhost:3000/api/gitshow
