@@ -3,43 +3,40 @@
 /* Controllers */
 
 angular.module('gitopen.controllers', ['gitopen.services']).
-    controller('IndexCtrl',function ($scope, socket, flash) {
+    controller('IndexCtrl',function ($scope, socket, flash, Contestant) {
         $scope.contestants = [];
 
-        socket.emit('listContestants');
+        Contestant.query(function(resp) {
+            $scope.contestants = resp;
+        })
 
-        // Incoming
-        socket.on('onContestantsListed', function (data) {
-            $scope.contestants = data;
-        });
+        socket.on('onCommit', function (data) {
+            flash.pop({title: "New commit", body: data.committer.name + " commited", type: "info"});
 
-        socket.on('onContestantUpdated', function (data) {
-            flash.pop({title: "New commit", body: data.name + " commited", type: "info"});
-
-            var contestant = _.findWhere($scope.contestants, {name: data.name});
+            var contestant = _.findWhere($scope.contestants, {name: data.committer.name});
             if (contestant) {
-                contestant.score = data.score;
+                contestant.score = data.committer.score;
             } else {
-                $scope.contestants.push(data);
+                $scope.contestants.push(data.committer);
             }
         });
 
-        var _resetFormValidation = function () {
-            $("input:first").focus();
-            var $dirtyInputs = $("#ldrbd").find(".new input.ng-dirty")
-                .removeClass("ng-dirty")
-                .addClass("ng-pristine");
-        };
-
         $scope.$on('$destroy', function (event) {
-//            socket.removeAllListeners();
-            // or something like
-            // socket.removeListener(this);
+            socket.removeAllListeners();
         });
     })
-    .controller('CommitCtrl',function ($scope, $routeParams, Commit) {
+    .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, Commit) {
+        socket.on('onCommit', function (data) {
+            flash.pop({title: "New commit", body: data.committer.name + " commited", type: "info"});
+
+            var commit = _.findWhere($scope.commits, {committer: { name: data.committer.name}});
+            if (commit) {
+                $scope.commits.push(data)
+            }
+        });
+
         var query = {id: $routeParams.id, search:"committer"};
-        var commits = Commit.get(query, function(resp) {
-            console.log(resp);
+        var commits = Commit.query(query, function(resp) {
+            $scope.commits = resp;
         })
     });

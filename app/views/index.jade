@@ -1,5 +1,9 @@
 extends layout
 block body
+    div(class="alert alert-block alert-{{flash.get().type}}",ng-show="flash.get().body")
+        h4 {{flash.get().title}}
+        p {{flash.get().body}}
+
     div(ng-view)
 
     script(src='components/jquery/jquery.js')

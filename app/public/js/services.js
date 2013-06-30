@@ -7,7 +7,7 @@
 // In this case it is a simple value service.
 angular.module('gitopen.services', ['ngResource'])
     .factory('Contestant', function ($resource) {
-        return $resource("/api/contestant/:name");
+        return $resource("/api/contestant/:id");
     })
     .factory('Commit', function($resource) {
         return $resource('/api/commit/:search/:id');
@@ -52,6 +52,9 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('socket', function ($rootScope) {
         var socket = io.connect();
         return {
+            removeAllListeners: function() {
+                socket.removeAllListeners();
+            },
             on: function (eventName, callback) {
                 socket.on(eventName, function () {
                     var args = arguments;

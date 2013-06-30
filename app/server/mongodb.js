@@ -26,7 +26,7 @@ exports.setup = function () {
     var commitSchema = new Schema(
         {
             hash: {type: String},
-            committer: {type: ObjectId, ref: 'contestantSchema'},
+            committer: {type: ObjectId, ref: 'Contestant'},
             date: {type: Date},
             message: {type: String}
         }
@@ -42,11 +42,6 @@ exports.findByName = function (name, callback) {
 
 exports.clearContestants = function(callback) {
     Contestant.remove({}, callback)
-}
-
-exports.addContestant = function (name) {
-    var contestant = new Contestant({ name: name, score: 0 });
-    save(contestant)
 }
 
 exports.addScore = function (name, score) {
@@ -71,9 +66,13 @@ exports.update = function (body, callback) {
     });
 };
 
-exports.findCommitsByCommitter = function(committer, callback) {
-    Commit.find({committer: committer}, callback);
-}
+exports.findCommitsByCommitter = function (committer, callback) {
+    Contestant.findById(committer, function(err, contestant) {
+        if (contestant) {
+            Commit.find({committer: contestant._id}).populate("committer").exec(callback)
+        }
+    })
+};
 
 exports.listContestants = function (callback) {
     Contestant.find(function (err, contestants) {
@@ -85,6 +84,8 @@ function save(contestant) {
     contestant.save(function (err) {
         if (err) {
             console.log(err)
+        } else {
+            console.log("Commit stored")
         }
     });
 }

@@ -38,10 +38,7 @@ app.get('/partials/:name', routes.partial);
 
 app.get('/api/commit/committer/:id', api.search);
 app.get('/api/contestant', api.findAllContestants);
-app.get('/api/contestant/:name', api.findContestantByName);
-app.post('/api/contestant/:name', api.updateContestant);
-app.post('/api/contestant', api.addContestant);
-app.post('/api/gitshow', api.newCommit);
+app.post('/api/commit', api.addCommit);
 
 // redirect all others to the index (HTML5 history)
 //app.get('*', routes.index);

@@ -1,7 +1,10 @@
 div(class="container")
     div(class="row")
         div(class="span9")
-            h1(class="widget-title") {{ commit.committer }}
+            h5 GitOpen 2013
+    div(class="row")
+        div(class="span9")
+            h6(class="widget-title") Showing commits for {{ commits[0].committer.name }}
             table(class="table table-striped")
                 thead
                     tr
@@ -9,7 +12,10 @@ div(class="container")
                         th Date
                         th Message
                 tbody
-                    tr(ng-repeat="contestant in contestants | orderBy:'-score'")
+                    tr(ng-repeat="commit in commits | orderBy:'-date'")
                         td {{commit.hash}}
                         td {{commit.date}}
                         td {{commit.message}}
+     div(class="row")
+         div(class="span9")
+            a(href="#") BACK
