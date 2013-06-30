@@ -30,7 +30,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             flash.pop({title: "New commit", body: data.committer.name + " commited", type: "info"});
 
             var commit = _.findWhere($scope.commits, {committer: { name: data.committer.name}});
-            if (commit) {
+            if (!commit) {
                 $scope.commits.push(data)
             }
         });

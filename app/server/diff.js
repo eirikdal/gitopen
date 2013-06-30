@@ -5,7 +5,7 @@ exports.parse = function(input) {
     var emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}/m;
     var nameRegex = /^Author: (.*) <.*>$/;
     var hashRegex = /^commit (.*)$/;
-    var commitRegex = /    (.*)$/;
+    var commitRegex = /^ {4}(.*)$/;
     var inserts = /^\+(?!\+)/;
     var deletions = /^\-(?!\-)/;
 
@@ -22,7 +22,7 @@ exports.parse = function(input) {
             results.score--;
         } else if (hashRegex.test(line)) {
             commit.hash = hashRegex.exec(line)[1];
-        } else if (commit.message != "" && commitRegex.test(line)) {
+        } else if (commit.message == "" && commitRegex.test(line)) {
             commit.message = commitRegex.exec(line)[1];
         }
     });
