@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('gitopen.controllers', ['gitopen.services']).
+angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
     controller('IndexCtrl',function ($scope, socket, flash, Contestant) {
         $scope.contestants = [];
 

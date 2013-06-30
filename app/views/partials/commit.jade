@@ -13,7 +13,7 @@ div(class="container")
                         th Message
                 tbody
                     tr(ng-repeat="commit in commits | orderBy:'-date'")
-                        td {{commit.hash}}
+                        td {{commit.hash | truncate:20}}
                         td {{commit.date}}
                         td {{commit.message}}
      div(class="row")
