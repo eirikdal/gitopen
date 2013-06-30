@@ -9,6 +9,9 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('Contestant', function ($resource) {
         return $resource("/api/contestant/:name");
     })
+    .factory('Commit', function($resource) {
+        return $resource('/api/commit/:search/:id');
+    })
     .factory("flash", function ($rootScope) {
         var queue = [], currentMessage = {};
 

@@ -13,4 +13,9 @@ exports.clear = function(req, res) {
     mongodb.clearContestants(function() {
         res.render('index');
     })
+};
+
+exports.commit = function(req, res) {
+    var name = req.params.email;
+    res.render('partials/commit');
 }

@@ -12,5 +12,6 @@ div(class="container")
                         th Score
                 tbody
                     tr(ng-repeat="contestant in contestants | orderBy:'-score'")
-                        td {{contestant.name}}
+                        td
+                           a(href="/commit/{{contestant._id}}") {{contestant.name}}
                         td {{contestant.score}}

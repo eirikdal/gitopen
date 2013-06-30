@@ -32,8 +32,14 @@ angular.module('gitopen.controllers', ['gitopen.services']).
         };
 
         $scope.$on('$destroy', function (event) {
-            socket.removeAllListeners();
+//            socket.removeAllListeners();
             // or something like
             // socket.removeListener(this);
         });
+    })
+    .controller('CommitCtrl',function ($scope, $routeParams, Commit) {
+        var query = {id: $routeParams.id, search:"committer"};
+        var commits = Commit.get(query, function(resp) {
+            console.log(resp);
+        })
     });

@@ -4,7 +4,8 @@ var express = require('express'),
     routes = require('./routes'),
     api = require('./routes/api'),
     mongodb = require('./server/mongodb.js'),
-    less = require('less-middleware');
+    less = require('less-middleware'),
+    url = require('url');
 
 /**
  * Module dependencies.
@@ -33,8 +34,9 @@ app.configure('production', function(){
 // Routes
 app.get('/', routes.index);
 app.get('/clear', routes.clear);
-
 app.get('/partials/:name', routes.partial);
+
+app.get('/api/commit/committer/:id', api.search);
 app.get('/api/contestant', api.findAllContestants);
 app.get('/api/contestant/:name', api.findContestantByName);
 app.post('/api/contestant/:name', api.updateContestant);

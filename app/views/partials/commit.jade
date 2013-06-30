@@ -1,0 +1,15 @@
+div(class="container")
+    div(class="row")
+        div(class="span9")
+            h1(class="widget-title") {{ commit.committer }}
+            table(class="table table-striped")
+                thead
+                    tr
+                        th SHA1
+                        th Date
+                        th Message
+                tbody
+                    tr(ng-repeat="contestant in contestants | orderBy:'-score'")
+                        td {{commit.hash}}
+                        td {{commit.date}}
+                        td {{commit.message}}

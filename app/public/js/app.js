@@ -13,6 +13,10 @@ angular.module('gitopen', [
             when('/', {
                 templateUrl: 'partials/index',
                 controller: 'IndexCtrl'
+            })
+            .when('/commit/:id', {
+                templateUrl: 'partials/commit',
+                controller: 'CommitCtrl'
             });
 
         $locationProvider.html5Mode(true);

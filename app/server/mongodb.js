@@ -1,8 +1,11 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
 var Contestant;
+var Commit;
 
 exports.setup = function () {
     mongoose.connect('mongodb://localhost/test');
@@ -13,7 +16,24 @@ exports.setup = function () {
         console.log("Connected to mongodb..")
     });
 
-    Contestant = mongoose.model('Contestant', { name: {type: String, unique: true }, score: Number });
+    var contestantSchema = new Schema(
+        {
+            name: {type: String, unique: true },
+            score: Number
+        }
+    );
+
+    var commitSchema = new Schema(
+        {
+            hash: {type: String},
+            committer: {type: ObjectId, ref: 'contestantSchema'},
+            date: {type: Date},
+            message: {type: String}
+        }
+    );
+
+    Contestant = mongoose.model('Contestant', contestantSchema);
+    Commit = mongoose.model('Commit', commitSchema);
 };
 
 exports.findByName = function (name, callback) {
@@ -35,6 +55,11 @@ exports.addScore = function (name, score) {
     save(contestant);
 }
 
+exports.saveCommit = function(body, callback) {
+    var commit = new Commit(body);
+    save(commit);
+}
+
 exports.update = function (body, callback) {
     delete body._id
     Contestant.findOneAndUpdate({name: body.name}, body, {upsert: true}, function (err, contestant) {
@@ -45,6 +70,10 @@ exports.update = function (body, callback) {
         callback(contestant);
     });
 };
+
+exports.findCommitsByCommitter = function(committer, callback) {
+    Commit.find({committer: committer}, callback);
+}
 
 exports.listContestants = function (callback) {
     Contestant.find(function (err, contestants) {
