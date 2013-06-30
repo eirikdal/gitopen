@@ -2,7 +2,7 @@
  * Serve JSON to our AngularJS client
  */
 var app = require('../app'),
-    mongodb = require('../public/js/mongodb'),
+    mongodb = require('../server/mongodb'),
     diff = require('../server/diff.js');
 
 exports.addContestant = function (req, res) {
@@ -33,14 +33,14 @@ exports.findAllContestants = function (req, res) {
 
 exports.newCommit = function(req, res) {
     var results = diff.parse(req.body);
+
     mongodb.findByName(results.user, function (err, user) {
         if (user) {
             results.score += user.score;
         }
         mongodb.update({name: results.user, score: results.score}, function (resp) {
-            console.log('calling notify')
             app.notify('onContestantUpdated', resp);
             res.json(resp);
         });
     });
-}
+};

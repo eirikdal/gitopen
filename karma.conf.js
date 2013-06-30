@@ -5,14 +5,15 @@ basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
-  JASMINE,
-  JASMINE_ADAPTER,
-  'app/components/angular/angular.js',
-  'app/components/angular-mocks/angular-mocks.js',
-  'app/scripts/*.js',
-  'app/scripts/**/*.js',
-  'test/mock/**/*.js',
-  'test/spec/**/*.js'
+    JASMINE,
+    JASMINE_ADAPTER,
+    'app/public/components/angular/angular.js',
+    'app/public/components/angular-resource/angular-resource.js',
+    'app/public/components/angular-mocks/angular-mocks.js',
+    'app/public/js/*.js',
+    'app/public/js/**/*.js',
+    'test/mocks/*.js',
+    'test/spec/**/*.js'
 ];
 
 // list of files to exclude
@@ -49,7 +50,7 @@ autoWatch = false;
 browsers = ['PhantomJS'];
 
 // If browser does not capture in given timeout [ms], kill it
-captureTimeout = 5000;
+captureTimeout = 20000;
 
 // Continuous Integration mode
 // if true, it capture browsers, run tests and exit

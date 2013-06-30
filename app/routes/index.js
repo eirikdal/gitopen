@@ -1,4 +1,4 @@
-var mongodb = require('../public/js/mongodb');
+var mongodb = require('../server/mongodb');
 
 exports.index = function(req, res){
     res.render('index');

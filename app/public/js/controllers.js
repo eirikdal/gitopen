@@ -14,7 +14,7 @@ angular.module('gitopen.controllers', ['gitopen.services']).
         });
 
         socket.on('onContestantUpdated', function (data) {
-            flash.pop({title: "New commit", body: "Foo commited", type: "info"});
+            flash.pop({title: "New commit", body: data.name + " commited", type: "info"});
 
             var contestant = _.findWhere($scope.contestants, {name: data.name});
             if (contestant) {
@@ -22,7 +22,6 @@ angular.module('gitopen.controllers', ['gitopen.services']).
             } else {
                 $scope.contestants.push(data);
             }
-
         });
 
         var _resetFormValidation = function () {

@@ -3,7 +3,7 @@
 var express = require('express'),
     routes = require('./routes'),
     api = require('./routes/api'),
-    mongodb = require('./public/js/mongodb.js'),
+    mongodb = require('./server/mongodb.js'),
     less = require('less-middleware');
 
 /**
