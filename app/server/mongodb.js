@@ -18,8 +18,7 @@ exports.setup = function () {
 
     var contestantSchema = new Schema(
         {
-            name: {type: String, unique: true },
-            score: Number
+            name: {type: String, unique: true }
         }
     );
 
@@ -28,7 +27,8 @@ exports.setup = function () {
             hash: {type: String},
             committer: {type: ObjectId, ref: 'Contestant'},
             date: {type: Date},
-            message: {type: String}
+            message: {type: String},
+            score: Number
         }
     );
 
@@ -41,14 +41,10 @@ exports.findByName = function (name, callback) {
 };
 
 exports.clearContestants = function(callback) {
-    Contestant.remove({}, callback)
-}
-
-exports.addScore = function (name, score) {
-    var contestant = Contestant.find({name: name});
-    contestant.score = score;
-    save(contestant);
-}
+    Contestant.remove({}, function() {
+        Commit.remove({}, callback)
+    })
+};
 
 exports.saveCommit = function(body, callback) {
     var commit = new Commit(body);

@@ -22,10 +22,7 @@ exports.addCommit = function(req, res) {
     var results = diff.parse(req.body);
 
     mongodb.findByName(results.contestant.user, function (err, user) {
-        if (user) {
-            results.contestant.score += user.score;
-        }
-        mongodb.update({name: results.contestant.user, score: results.contestant.score}, function (resp) {
+        mongodb.update({name: results.contestant.user}, function (resp) {
             results.commit.committer = resp;
             mongodb.saveCommit(results.commit);
 

@@ -11,11 +11,13 @@ div(class="container")
                         th SHA1
                         th Date
                         th Message
+                        th Score
                 tbody
                     tr(ng-repeat="commit in commits | orderBy:'-date'")
                         td {{commit.hash | truncate:20}}
                         td {{commit.date}}
                         td {{commit.message}}
+                        td {{commit.score}}
      div(class="row")
          div(class="span9")
             a(href="#") BACK

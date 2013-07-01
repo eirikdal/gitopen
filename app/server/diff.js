@@ -9,17 +9,17 @@ exports.parse = function(input) {
     var inserts = /^\+(?!\+)/;
     var deletions = /^\-(?!\-)/;
 
-    var results = {user: "", score: 0, commit: null};
-    var commit = {hash: "", date: new Date(), message: ""};
+    var results = {user: "", commit: null};
+    var commit = {hash: "", score: 0, date: new Date(), message: ""};
 
     _.each(input.diff, function(line) {
         if (emailRegex.test(line)) {
             results.name = nameRegex.exec(line)[1];
             results.user = emailRegex.exec(line)[0];
         } else if (inserts.test(line)) {
-            results.score++;
+            commit.score++;
         } else if (deletions.test(line)) {
-            results.score--;
+            commit.score--;
         } else if (hashRegex.test(line)) {
             commit.hash = hashRegex.exec(line)[1];
         } else if (commit.message == "" && commitRegex.test(line)) {
