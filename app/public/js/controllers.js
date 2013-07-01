@@ -48,7 +48,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
         });
 
         var query = {id: $routeParams.id, search:"committer"};
-        var commits = Commit.query(query, function(resp) {
+        Commit.query(query, function(resp) {
             $scope.commits = resp;
         })
     });
