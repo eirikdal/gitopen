@@ -28,9 +28,11 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
 
             var contestant = _.findWhere($scope.contestants, {name: data.committer.name});
             if (!contestant) {
+                data.committer.score = data.score;
                 $scope.contestants.push(data.committer);
+            } else {
+                updateScore(contestant);
             }
-            updateScore(contestant);
         });
 
         $scope.$on('$destroy', function (event) {
