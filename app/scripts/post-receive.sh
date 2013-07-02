@@ -9,7 +9,8 @@
 
 read oldrev newrev refname
 
-IFS=$'\n'
+IFS=$'
+'
 
 commits=$(echo -e | git log $oldrev..$newrev --pretty=format:"%H")
 
@@ -27,6 +28,9 @@ do
     gitout=$(echo "$gitout" | tr '\\' ' ')
 
     lines="["
+
+    IFS=$'
+    '
 
     for item in $gitout
     do
