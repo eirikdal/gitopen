@@ -24,6 +24,7 @@ do
     gitout=$(echo "$gitout" | tr '\v' '\u2028')
     gitout=$(echo "$gitout" | tr '\f' '\u2028')
     gitout=$(echo "$gitout" | tr '\b' '\u2028')
+    gitout=$(echo "$gitout" | tr '\\' ' ')
 
     lines="["
 
@@ -34,7 +35,6 @@ do
     lines=${lines%?}
     json='{"diff":'$lines']}'
     echo "$json" > parsed.diff
-    echo "$json"
 
     curl -silent -H "Content-Type: application/json" -X POST -d @parsed.diff http://localhost:3000/api/commit
 done
