@@ -27,7 +27,7 @@ angular.module('gitopen.filters', [])
     })
     .filter('bugzilla', function() {
         return function(text) {
-            return text.replace(/.*([b|B][u|U][g|G]).{1,4}(\d{4})(.*)/, '<a href="http://slfbugzilla/show_bug.cgi?id=$2">Bug $2: $3</a>')
+            return text.replace(/.*([b|B][u|U][g|G]).{1,4}(\d{4})(.*)/, '<a href="http://slfbugzilla/show_bug.cgi?id=$2">Bug $2</a> $3')
         }
     });
 
