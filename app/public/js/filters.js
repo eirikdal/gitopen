@@ -24,5 +24,10 @@ angular.module('gitopen.filters', [])
             }
 
         };
+    })
+    .filter('bugzilla', function() {
+        return function(text) {
+            return text.replace(/([b|B][u|U][g|G]).?.?(\d{4})/, '<a href="http://slfbugzilla/show_bug.cgi?id=\\$2">Bug \\$2</a>')
+        }
     });
 
