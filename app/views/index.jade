@@ -4,7 +4,13 @@ block body
         h4 {{flash.get().title}}
         p {{flash.get().body}}
 
-    div(ng-view, class="gitopen-animate-container", ng-animate="{enter: 'gitopen-enter', leave: 'gitopen-leave'}")
+    div(class="container")
+        div(class="row")
+            div(class="span9")
+                h5 GitOpen 2013
+
+    div(class="container")
+        div(ng-view, class="gitopen-animate-container", ng-animate="{enter: 'gitopen-enter', leave: 'gitopen-leave'}")
 
     script(src='components/jquery/jquery.js')
     script(src='components/toastr/toastr.js')
