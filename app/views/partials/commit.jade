@@ -9,7 +9,7 @@ div(class="row")
                     th Message
                     th Score
             tbody
-                tr(ng-repeat="commit in commits | orderBy:'-date'")
+                tr(ng-repeat="commit in commits | orderBy:'-date'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
                     td {{commit.hash | truncate:20}}
                     td {{commit.date | date:'MM.dd HH:mm'}}
                     td
