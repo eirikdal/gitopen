@@ -3,17 +3,7 @@
 /* Controllers */
 
 angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
-    controller('IndexCtrl',function ($scope, socket, flash, Contestant, Commit) {
-        $scope.contestants = [];
-
-        Contestant.query(function(resp) {
-            _.each(resp, function(contestant) {
-                updateScore(contestant);
-            });
-
-            $scope.contestants = resp;
-        });
-
+    controller('IndexCtrl',function ($scope, socket, flash, contestants, Commit) {
         var updateScore = function(contestant) {
             var query = {id: contestant._id, search:"committer"};
             Commit.query(query, function (commits) {
@@ -22,6 +12,11 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
                 }, 0);
             });
         };
+
+        $scope.contestants = contestants;
+        _.each($scope.contestants, function(contestant) {
+            updateScore(contestant);
+        });
 
         socket.on('onCommit', function (data) {
             flash.pop({title: "New commit", body: data.committer.name + " commited", type: "info"});
@@ -39,7 +34,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             socket.removeAllListeners();
         });
     })
-    .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, Commit) {
+    .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, commits) {
         socket.on('onCommit', function (data) {
             flash.pop({title: "New commit", body: data.committer.name + " commited", type: "info"});
 
@@ -49,8 +44,5 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             }
         });
 
-        var query = {id: $routeParams.id, search:"committer"};
-        Commit.query(query, function(resp) {
-            $scope.commits = resp;
-        })
+        $scope.commits = commits;
     });

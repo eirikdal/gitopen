@@ -12,11 +12,30 @@ angular.module('gitopen', [
         $routeProvider.
             when('/', {
                 templateUrl: 'partials/index',
-                controller: 'IndexCtrl'
+                controller: 'IndexCtrl', resolve: {
+                    contestants: function($q, Contestant) {
+                        var d = $q.defer();
+
+                        Contestant.query(function(contestants) {
+                            d.resolve(contestants);
+                        });
+                        //$route.current.params.id
+                        return d.promise;
+                    }
+                }
             })
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',
-                controller: 'CommitCtrl'
+                controller: 'CommitCtrl', resolve: {
+                    commits: function($q, $route, Commit) {
+                        var d = $q.defer();
+                        var query = {id: $route.current.params.id, search:"committer"};
+                        Commit.query(query, function(resp) {
+                            d.resolve(resp);
+                        });
+                        return d.promise;
+                    }
+                }
             });
 
         $locationProvider.html5Mode(true);
