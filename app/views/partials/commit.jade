@@ -16,7 +16,7 @@ div(class="container")
                     tr(ng-repeat="commit in commits | orderBy:'-date'")
                         td {{commit.hash | truncate:20}}
                         td {{commit.date | date:'MM.dd HH:mm'}}
-                        td {{commit.message}}
+                        td {{commit.message | bugzilla}}
                         td {{commit.score}}
      div(class="row")
          div(class="span9")
