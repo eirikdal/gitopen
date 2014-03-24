@@ -79,31 +79,24 @@ angular.module('gitopen.services', ['ngResource'])
         };
     })
     .value('version', '0.1')
-    .value('chartConfig', {
-            options: {
-                chart: {
-                    type: 'bar'
+    .factory('chartConfig', function() {
+            var test =
+            {
+                options: {
+                    chart: {
+                        type: 'bubble'
+                    }
                 },
-                tooltip: {
-                    style: {
-                        padding: 10,
-                        fontWeight: 'bold'
+                title: {
+                    text: 'Commits'
+                },
+                xAxis: {
+                    type: "datetime",
+                    dateTimeLabelFormats: { // don't display the dummy year
+                        month: '%e. %b',
+                        year: '%b'
                     }
                 }
-            },
-            series: [
-                {
-                    data: [10, 15, 12, 8, 7]
-                }
-            ],
-            title: {
-                text: 'Hello'
-            },
-            loading: false,
-            xAxis: {
-                currentMin: 0,
-                currentMax: 20,
-                title: {text: 'values'}
-            },
-            useHighStocks: false
+            };
+        return test;
     });

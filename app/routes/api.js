@@ -21,8 +21,8 @@ exports.search = function(req, res) {
 };
 
 exports.history = function(req, res) {
-    var repo = new Repo( "/home/hauk184/workspace/gitopen/.git");
-    repo.activeDays(function(error, activeDays) {
+    var repo = new Repo("C:\\Users\\Eirik\\workspace\\gitopen\\.git");
+    repo.activeDays("--all", function(error, activeDays) {
         res.json(activeDays);
     });
 };

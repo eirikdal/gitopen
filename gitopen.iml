@@ -9,6 +9,8 @@
     <orderEntry type="library" name="Node.js v0.10.12 Core Modules" level="application" />
     <orderEntry type="library" name="Node.js Dependencies for gitopen" level="project" />
     <orderEntry type="library" name="gitopen node_modules" level="project" />
+    <orderEntry type="library" name="gitopen node_modules" level="project" />
+    <orderEntry type="library" name="Node.js v0.10.26 Core Modules" level="application" />
   </component>
 </module>
 

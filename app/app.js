@@ -18,7 +18,7 @@ app.configure(function(){
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
     app.use(express.methodOverride());
-    app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    app.use(require('less-middleware')(__dirname + '/public'));
     app.use(express.static(publicDir));
     app.use(app.router);
 });

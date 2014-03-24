@@ -1,14 +1,12 @@
 'use strict';
 
 angular.module('gitopen', [
-    'ngRoute',
-    "highcharts-ng",
+    "highcharts-ng", 'ngRoute',
     'gitopen.controllers',
     'gitopen.filters',
     'gitopen.services',
     'gitopen.directives'
-])
-    .config(function ($routeProvider, $locationProvider) {
+]).config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/', {
                 templateUrl: 'partials/index',
                 controller: 'IndexCtrl', resolve: {

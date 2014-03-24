@@ -1,10 +1,28 @@
-extends index
-block chart
-    div(class="container", ng-controller="History")
+extends layout
+block body
+    div(class="container", ng-controller="HistoryCtrl")
         div(class="row")
             div(class="span9")
                 h6(class="widget-title")
-                    highchart(id="chart1", config="fooConfig", class="span9")
+                    highchart(id="chart1",config="chartConfig")
         div(class="row")
             div(class="span9")
                 a(href="#") BACK
+
+    script(src='components/jquery/dist/jquery.js')
+    script(src='components/angular/angular.js')
+    script(src="http://code.highcharts.com/highcharts.js")
+    script(src="http://code.highcharts.com/highcharts-more.js")
+    script(src="https://rawgithub.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js")
+    //script(src="http://bouil.github.io/angular-google-chart/ng-google-chart.js")
+    script(src='components/angular-route/angular-route.js')
+    script(src='components/angular-resource/angular-resource.js')
+    script(src='components/toastr/toastr.js')
+    script(src="components/angular-socket-io/socket.js")
+    script(src='js/app.js')
+    script(src='js/services.js')
+    script(src='js/controllers.js')
+    script(src='js/filters.js')
+    script(src='js/directives.js')
+    script(src='components/underscore/underscore.js')
+    script(src='http://code.jquery.com/ui/1.9.2/jquery-ui.js')
