@@ -84,7 +84,8 @@ angular.module('gitopen.services', ['ngResource'])
             {
                 options: {
                     chart: {
-                        type: 'bubble'
+                        type: 'bubble',
+                        zoomType: "y"
                     }
                 },
                 title: {
@@ -93,7 +94,7 @@ angular.module('gitopen.services', ['ngResource'])
                 xAxis: {
                     type: "datetime",
                     dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e. %b',
+                        month: '%e. %b. %Y',
                         year: '%b'
                     }
                 }

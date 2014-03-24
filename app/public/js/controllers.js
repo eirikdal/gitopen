@@ -48,6 +48,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             var test = _.pairs(history.dates);
             var test2 = _.map(test, function(val) {
                 val[0] = Date.parse(val[0]);
+                val[2] = val[1];
                 return val;
             });
             $scope.chartConfig.series[0].data = test2;
