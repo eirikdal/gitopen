@@ -8,6 +8,7 @@
       "jade": "*",
       "mongoose": "*",
       "regex-stream": "*",
+      "git-tools": "*",
       "underscore": "*",
       "less-middleware": "*",
       "karma": "*"

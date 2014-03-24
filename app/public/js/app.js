@@ -2,14 +2,14 @@
 
 angular.module('gitopen', [
     'ngRoute',
+    "highcharts-ng",
     'gitopen.controllers',
     'gitopen.filters',
     'gitopen.services',
     'gitopen.directives'
 ])
     .config(function ($routeProvider, $locationProvider) {
-        $routeProvider.
-            when('/', {
+        $routeProvider.when('/', {
                 templateUrl: 'partials/index',
                 controller: 'IndexCtrl', resolve: {
                     contestants: function ($q, Contestant) {

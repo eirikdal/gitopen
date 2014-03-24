@@ -11,7 +11,8 @@
     "angular-socket-io": "*",
     "underscore": "*",
     "bootstrap": "*",
-    "toastr": "*"
+    "toastr": "*",
+    "highcharts-ng": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.5",
