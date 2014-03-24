@@ -86,11 +86,21 @@ angular.module('gitopen.services', ['ngResource'])
                     chart: {
                         type: 'bubble',
                         zoomType: "y"
+                    },
+                    tooltip: {
+                        crosshairs: [false,false],
+                        formatter: function() {
+                            return  '<b>' + this.series.name +'</b><br/>' +
+                                Highcharts.dateFormat('%e. %b. %Y',
+                                    new Date(this.x))
+                                + ': ' + this.y + ' commits';
+                        }
                     }
                 },
                 title: {
                     text: 'Commits'
                 },
+
                 xAxis: {
                     type: "datetime",
                     dateTimeLabelFormats: { // don't display the dummy year
