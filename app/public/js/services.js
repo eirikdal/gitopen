@@ -9,8 +9,11 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('Contestant', function ($resource) {
         return $resource("/api/contestant/:id");
     })
-    .factory('Commit', function($resource) {
+    .factory('Commit', function ($resource) {
         return $resource('/api/commit/:search/:id');
+    })
+    .factory("History", function ($resource) {
+        return $resource('/api/history/:id');
     })
     .factory("flash", function ($rootScope) {
         var queue = [], currentMessage = {};
@@ -52,7 +55,7 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('socket', function ($rootScope) {
         var socket = io.connect();
         return {
-            removeAllListeners: function() {
+            removeAllListeners: function () {
                 socket.removeAllListeners();
             },
             on: function (eventName, callback) {
@@ -75,4 +78,32 @@ angular.module('gitopen.services', ['ngResource'])
             }
         };
     })
-    .value('version', '0.1');
+    .value('version', '0.1')
+    .value('chartConfig', {
+            options: {
+                chart: {
+                    type: 'bar'
+                },
+                tooltip: {
+                    style: {
+                        padding: 10,
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            series: [
+                {
+                    data: [10, 15, 12, 8, 7]
+                }
+            ],
+            title: {
+                text: 'Hello'
+            },
+            loading: false,
+            xAxis: {
+                currentMin: 0,
+                currentMax: 20,
+                title: {text: 'values'}
+            },
+            useHighStocks: false
+    });

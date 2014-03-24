@@ -3,7 +3,7 @@
  */
 var app = require('../app'),
     url = require('url'),
-    git = require('nodegit'),
+    Repo = require('git-tools'),
     path = require('path'),
     mongodb = require('../server/mongodb'),
     diff = require('../server/diff.js');
@@ -20,32 +20,11 @@ exports.search = function(req, res) {
     });
 };
 
-exports.foo = function(req, res) {
-    var repodir = path.resolve(__dirname, '/home/hauk184/workspace/gitopen/.git');
-    git.Branch.foreach(repodir, git.GIT_BRANCH_LOCAL, function() {
-        console.log('foo')
+exports.history = function(req, res) {
+    var repo = new Repo( "/home/hauk184/workspace/gitopen/.git");
+    repo.activeDays(function(error, activeDays) {
+        res.json(activeDays);
     });
-//    git.Repo.open(repodir, function(error, repo) {
-//        if (error) throw error;
-//
-//        repo.getMaster(function(error, branch) {
-//            if (error) throw error;
-//
-//            // History returns an event.
-//            var history = branch.history();
-//
-//            // History emits 'commit' event for each commit in the branch's history
-//            history.on('commit', function(commit) {
-//                console.log('commit ' + commit.sha());
-//                console.log('Author:', commit.author().name() + ' <' + commit.author().email() + '>');
-//                console.log('Date:', commit.date());
-//                console.log('\n    ' + commit.message());
-//            });
-//
-//            // Don't forget to call `start()`!
-//            history.start();
-//        });
-//    });
 };
 
 exports.addCommit = function(req, res) {

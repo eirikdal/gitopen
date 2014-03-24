@@ -1,7 +1,5 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
-
 angular.module('gitopen', [
     'ngRoute',
     'gitopen.controllers',
@@ -24,6 +22,10 @@ angular.module('gitopen', [
                         return d.promise;
                     }
                 }
+            })
+            .when('/chart/', {
+                templateUrl: 'partials/index',
+                controller: 'HistoryCtrl'
             })
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',

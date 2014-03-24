@@ -20,6 +20,6 @@ exports.commit = function (req, res) {
     res.render('partials/commit');
 }
 
-exports.githist = function(req, res) {
-    res.render('githist');
+exports.chart = function(req, res) {
+    res.render('chart');
 }

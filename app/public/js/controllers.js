@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
+angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters', 'highcharts-ng']).
     controller('IndexCtrl',function ($scope, socket, flash, contestants, Commit) {
         var updateScore = function(contestant) {
             var query = {id: contestant._id, search:"committer"};
@@ -33,6 +33,12 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
         $scope.$on('$destroy', function (event) {
             socket.removeAllListeners();
         });
+    })
+    .controller('HistoryCtrl', function($scope, History, chartConfig) {
+        $scope.chartConfig = chartConfig;
+        History.get(function(history) {
+            $scope.chartConfig.series = {name: "foo", data: history};
+        })
     })
     .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, commits) {
         socket.on('onCommit', function (data) {
