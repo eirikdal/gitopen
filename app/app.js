@@ -35,6 +35,8 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/clear', routes.clear);
 app.get('/partials/:name', routes.partial);
+app.get('/githist', routes.githist);
+app.get('/foo', api.foo);
 
 app.get('/api/commit/committer/:id', api.search);
 app.get('/api/contestant', api.findAllContestants);

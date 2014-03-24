@@ -3,20 +3,21 @@
 // Declare app level module which depends on filters, and services
 
 angular.module('gitopen', [
-        'gitopen.controllers',
-        'gitopen.filters',
-        'gitopen.services',
-        'gitopen.directives'
-    ])
+    'ngRoute',
+    'gitopen.controllers',
+    'gitopen.filters',
+    'gitopen.services',
+    'gitopen.directives'
+])
     .config(function ($routeProvider, $locationProvider) {
         $routeProvider.
             when('/', {
                 templateUrl: 'partials/index',
                 controller: 'IndexCtrl', resolve: {
-                    contestants: function($q, Contestant) {
+                    contestants: function ($q, Contestant) {
                         var d = $q.defer();
 
-                        Contestant.query(function(contestants) {
+                        Contestant.query(function (contestants) {
                             d.resolve(contestants);
                         });
                         //$route.current.params.id
@@ -27,10 +28,10 @@ angular.module('gitopen', [
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',
                 controller: 'CommitCtrl', resolve: {
-                    commits: function($q, $route, Commit) {
+                    commits: function ($q, $route, Commit) {
                         var d = $q.defer();
-                        var query = {id: $route.current.params.id, search:"committer"};
-                        Commit.query(query, function(resp) {
+                        var query = {id: $route.current.params.id, search: "committer"};
+                        Commit.query(query, function (resp) {
                             d.resolve(resp);
                         });
                         return d.promise;
@@ -43,25 +44,25 @@ angular.module('gitopen', [
     });
 
 /*
-// misc form validation stuff
-$(function(){
+ // misc form validation stuff
+ $(function(){
 
-    setTimeout(function(){
-        // wait till angular is done populating the list
+ setTimeout(function(){
+ // wait till angular is done populating the list
 
-        // focus the first field
-        $("input:first").focus();
+ // focus the first field
+ $("input:first").focus();
 
-        var $requiredInputs = $("#ldrbd").find("input[required]:not('.ng-dirty')");
-        $requiredInputs.on("blur", function(){
-            $(this)
-                .removeClass("ng-pristine")
-                .addClass("ng-dirty")
-                .attr({
-                    placeholder: "Required"
-                });
+ var $requiredInputs = $("#ldrbd").find("input[required]:not('.ng-dirty')");
+ $requiredInputs.on("blur", function(){
+ $(this)
+ .removeClass("ng-pristine")
+ .addClass("ng-dirty")
+ .attr({
+ placeholder: "Required"
+ });
 
-        });
-    }, 100);
+ });
+ }, 100);
 
-});*/
+ });*/

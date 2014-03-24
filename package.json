@@ -9,7 +9,8 @@
       "mongoose": "*",
       "regex-stream": "*",
       "underscore": "*",
-      "less-middleware": "*"
+      "less-middleware": "*",
+      "karma": "*"
   },
     "devDependencies": {
     "grunt": "~0.4.1",

@@ -19,3 +19,7 @@ exports.commit = function (req, res) {
     var name = req.params.email;
     res.render('partials/commit');
 }
+
+exports.githist = function(req, res) {
+    res.render('githist');
+}

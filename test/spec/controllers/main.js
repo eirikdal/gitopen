@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: IndexCtrl', function () {
 
     // load the controller's module
     beforeEach(module('gitopen'));
