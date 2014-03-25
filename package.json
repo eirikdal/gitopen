@@ -10,6 +10,8 @@
       "regex-stream": "*",
       "git-tools": "*",
       "string": "*",
+      "mysql": "*",
+      "findit": "*",
       "underscore": "*",
       "node-mysql": "*",
       "less-middleware": "*",

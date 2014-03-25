@@ -39,42 +39,69 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             socket.removeAllListeners();
         });
     })
-    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla) {
+    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla, Repository, bubbleChartConfig) {
         $scope.chartSeries = [
             {
                 "name": "Commits",
                 "data": []
-            },
-            {
-                "name": "Time",
-                "data": []
             }
+//            {
+//                "name": "Time",
+//                "data": []
+//            }
         ];
-        $scope.chartConfig = chartConfig;
+        $scope.repositories = Repository.query();
+        $scope.chartConfig = bubbleChartConfig;
         $scope.chartConfig.series = $scope.chartSeries;
 
-        Bugzilla.query(function(bugzilla) {
-            var test2 = _.map(bugzilla, function(val) {
-                return val.Timeforbruk;
+        var queryBugzilla = function() {
+            Bugzilla.query(function(bugzilla) {
+                var test2 = _.map(bugzilla, function(val) {
+                    return val.Timeforbruk;
+                })
+                $scope.chartConfig.series[1].data = test2;
+            });
+        }
+
+        $scope.$watch('year', function(year) {
+            if (year === undefined) return;
+            History.get(function(history) {
+//            this.createSplineChart(history);
+                createBubbleChart(history, 0, year);
             })
-            $scope.chartConfig.series[1].data = test2;
         });
 
-        History.get(function(history) {
+        var createSplineChart = function (history) {
             var test = _.pairs(history.dates);
             var weeks = new Array();
-            _.each(test, function(val) {
-                var week = new Date(val[0]).getWeek()-1;
+            weeks[0] = 0;
+            _.each(test, function (val) {
+                var week = new Date(val[0]).getWeek() - 1;
                 var number = parseInt(val[1]);
                 if (weeks[week] === undefined) {
                     weeks[week] = number;
                 } else {
-                    weeks[week] += number;;
+                    weeks[week] += number;
                 }
-                weeks[week] += number;
             });
             $scope.chartConfig.series[0].data = weeks;
-        })
+        };
+
+        var createBubbleChart = function (points, repositoryId, year) {
+            var months = [0,0,0,0,0,0,0,0,0,0,0,0];
+            _.each(months, function(n, idx) {
+                var month = points.years[year].months[idx+1];
+                if (month === undefined) {
+                    months[idx] = [idx,repositoryId,0];
+                } else {
+                    months[idx] = [idx,repositoryId,month.commits];
+                }
+            });
+            $scope.chartConfig.series[0].data = months;
+        };
+
+
+
     })
     .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, commits) {
         socket.on('onCommit', function (data) {

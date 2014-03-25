@@ -15,6 +15,9 @@ angular.module('gitopen.services', ['ngResource'])
     .factory("History", function ($resource) {
         return $resource('/api/history/:id');
     })
+    .factory("Repository", function($resource) {
+        return $resource('/api/repository');
+    })
     .factory("Bugzilla", function ($resource) {
         return $resource('/api/bugzilla/:product');
     })
@@ -82,8 +85,33 @@ angular.module('gitopen.services', ['ngResource'])
         };
     })
     .value('version', '0.1')
+    .factory('bubbleChartConfig', function() {
+        var chart =
+        {
+            options: {
+                chart: {
+                    type: 'bubble',
+                    zoomType: 'xy'
+                },
+                tooltip: {
+                    crosshairs: [false,false]
+                }
+            },
+            title: {
+                text: 'Commits'
+            },
+
+            yAxis: {
+                categories:['gitopen', 'foo', 'bar']
+            },
+            xAxis: {
+                categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
+            }
+        };
+        return chart;
+    })
     .factory('chartConfig', function() {
-            var test =
+            var chart =
             {
                 options: {
                     chart: {
@@ -107,5 +135,5 @@ angular.module('gitopen.services', ['ngResource'])
                     max: 52
                 }
             };
-        return test;
+        return chart;
     });

@@ -5,8 +5,8 @@ exports.findRepositories = function(dir, callback) {
         dirs = [];
     //This listens for directories found
     finder.on('directory', function (dir) {
-        if (S(dir).endsWith("/.git")) {
-            dir.push(dirs);
+        if (S(dir).endsWith("\.git")) {
+            dirs.push(dir);
         }
     });
 

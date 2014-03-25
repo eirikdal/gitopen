@@ -1,8 +1,16 @@
 extends layout
 block body
     div(class="container", ng-controller="HistoryCtrl")
-        div(class="row")
-          h1 GitOpen
+        h1 GitOpen
+        nav(class="navbar navbar-default",role="navigation")
+            form(role="search", class="navbar-form navbar-left")
+                div(class="form-group")
+                    label(for="dropdown-year") Velg år
+                    select(id="dropdown-year", class="input-sm", ng-model="year", ng-options="year for year in [2014,2013,2012,2011,2010]")
+            form(role="search", class="navbar-form navbar-left")
+                div(class="form-group")
+                    label(for="dropdown-chart") Velg graf
+                    select(id="dropdown-chart", class="input-sm", ng-model="chart", ng-options="chart for chart in ['Bubble', 'Spline']")
         div(class="row")
             div(class="span9")
                 h6(class="widget-title")
@@ -11,13 +19,11 @@ block body
             div(class="span9")
                 a(href="#") BACK
 
-    script(src='components/jquery/dist/jquery.js')
     script(src='components/angular/angular.js')
     script(src="http://code.highcharts.com/highcharts.js")
     script(src="http://code.highcharts.com/highcharts-more.js")
     //script(src="http://code.highcharts.com/modules/exporting.js")
     script(src="https://rawgithub.com/pablojim/highcharts-ng/master/dist/highcharts-ng.js")
-    //script(src="http://bouil.github.io/angular-google-chart/ng-google-chart.js")
     script(src='components/angular-route/angular-route.js')
     script(src='components/angular-resource/angular-resource.js')
     script(src='components/toastr/toastr.js')
