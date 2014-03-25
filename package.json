@@ -10,6 +10,7 @@
       "regex-stream": "*",
       "git-tools": "*",
       "underscore": "*",
+      "node-mysql": "*",
       "less-middleware": "*",
       "karma": "*"
   },

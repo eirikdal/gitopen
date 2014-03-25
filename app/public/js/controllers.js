@@ -2,6 +2,11 @@
 
 /* Controllers */
 
+Date.prototype.getWeek = function() {
+    var onejan = new Date(this.getFullYear(), 0, 1);
+    return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+}
+
 angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
     controller('IndexCtrl',function ($scope, socket, flash, contestants, Commit) {
         var updateScore = function(contestant) {
@@ -34,24 +39,41 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             socket.removeAllListeners();
         });
     })
-    .controller('HistoryCtrl', function($scope, History, chartConfig) {
+    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla) {
         $scope.chartSeries = [
             {
                 "name": "Commits",
+                "data": []
+            },
+            {
+                "name": "Time",
                 "data": []
             }
         ];
         $scope.chartConfig = chartConfig;
         $scope.chartConfig.series = $scope.chartSeries;
 
+        Bugzilla.query(function(bugzilla) {
+            var test2 = _.map(bugzilla, function(val) {
+                return val.Timeforbruk;
+            })
+            $scope.chartConfig.series[1].data = test2;
+        });
+
         History.get(function(history) {
             var test = _.pairs(history.dates);
-            var test2 = _.map(test, function(val) {
-                val[0] = Date.parse(val[0]);
-                val[2] = val[1];
-                return val;
+            var weeks = new Array();
+            _.each(test, function(val) {
+                var week = new Date(val[0]).getWeek()-1;
+                var number = parseInt(val[1]);
+                if (weeks[week] === undefined) {
+                    weeks[week] = number;
+                } else {
+                    weeks[week] += number;;
+                }
+                weeks[week] += number;
             });
-            $scope.chartConfig.series[0].data = test2;
+            $scope.chartConfig.series[0].data = weeks;
         })
     })
     .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, commits) {

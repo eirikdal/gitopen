@@ -15,6 +15,9 @@ angular.module('gitopen.services', ['ngResource'])
     .factory("History", function ($resource) {
         return $resource('/api/history/:id');
     })
+    .factory("Bugzilla", function ($resource) {
+        return $resource('/api/bugzilla/:product');
+    })
     .factory("flash", function ($rootScope) {
         var queue = [], currentMessage = {};
 
@@ -84,29 +87,24 @@ angular.module('gitopen.services', ['ngResource'])
             {
                 options: {
                     chart: {
-                        type: 'bubble',
-                        zoomType: "y"
+                        type: 'areaspline'
                     },
                     tooltip: {
-                        crosshairs: [false,false],
-                        formatter: function() {
-                            return  '<b>' + this.series.name +'</b><br/>' +
-                                Highcharts.dateFormat('%e. %b. %Y',
-                                    new Date(this.x))
-                                + ': ' + this.y + ' commits';
-                        }
+                        crosshairs: [false,false]
                     }
                 },
                 title: {
                     text: 'Commits'
                 },
 
+                yAxis: {
+                    min: 0,
+                    max: 400
+                },
                 xAxis: {
-                    type: "datetime",
-                    dateTimeLabelFormats: { // don't display the dummy year
-                        month: '%e. %b. %Y',
-                        year: '%b'
-                    }
+                    type: "number",
+                    min: 0,
+                    max: 52
                 }
             };
         return test;

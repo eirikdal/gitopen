@@ -18,8 +18,8 @@ exports.clear = function (req, res) {
 exports.commit = function (req, res) {
     var name = req.params.email;
     res.render('partials/commit');
-}
+};
 
 exports.chart = function(req, res) {
     res.render('chart');
-}
+};
