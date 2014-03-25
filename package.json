@@ -9,6 +9,7 @@
       "mongoose": "*",
       "regex-stream": "*",
       "git-tools": "*",
+      "string": "*",
       "underscore": "*",
       "node-mysql": "*",
       "less-middleware": "*",
