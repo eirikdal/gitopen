@@ -35,7 +35,6 @@ app.configure('production', function(){
 app.get('/', routes.index);
 app.get('/clear', routes.clear);
 app.get('/partials/:name', routes.partial);
-app.get('/chart', routes.chart);
 
 app.get('/api/history', api.findAllHistory);
 app.get('/api/repository', api.repositories);
@@ -45,7 +44,7 @@ app.get('/api/contestant', api.findAllContestants);
 app.post('/api/commit', api.addCommit);
 
 // redirect all others to the index (HTML5 history)
-//app.get('*', routes.index);
+app.get('*', routes.index);
 
 // Start server
 server = require('http').createServer(app);

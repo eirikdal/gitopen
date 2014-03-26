@@ -1,13 +1,3 @@
-div(class="row")
-    div(class="span9")
-        h5(class="widget-title") Leaderboard
-        table(class="table table-striped")
-            thead
-                tr
-                    th Email
-                    th Score
-            tbody
-                tr(ng-repeat="contestant in contestants | orderBy:'score'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
-                    td
-                       a(href="/commit/{{contestant._id}}") {{contestant.name}}
-                    td {{contestant.score}}
+h3 Velkommen til GitOpen 2014!
+
+p foofofo

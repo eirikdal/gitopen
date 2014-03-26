@@ -21,5 +21,5 @@ exports.commit = function (req, res) {
 };
 
 exports.chart = function(req, res) {
-    res.render('chart');
+    res.render('partials/chart');
 };

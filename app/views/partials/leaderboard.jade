@@ -1,0 +1,10 @@
+table(class="table table-striped")
+    thead
+        tr
+            th Email
+            th Score
+    tbody
+        tr(ng-repeat="contestant in contestants | orderBy:'score'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
+            td
+               a(href="/commit/{{contestant._id}}") {{contestant.name}}
+            td {{contestant.score}}

@@ -8,7 +8,8 @@ Date.prototype.getWeek = function() {
 };
 
 angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng-breadcrumbs']).
-    controller('IndexCtrl',function ($scope, socket, flash, contestants, Commit) {
+    controller('LeaderboardCtrl',function ($scope, socket, flash, contestants, Commit, breadcrumbs) {
+        $scope.breadcrumbs = breadcrumbs;
         var updateScore = function(contestant) {
             var query = {id: contestant._id, search:"committer"};
             Commit.query(query, function (commits) {

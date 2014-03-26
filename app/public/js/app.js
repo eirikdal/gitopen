@@ -10,21 +10,23 @@ angular.module('gitopen', [
 ]).config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/', {
                 templateUrl: 'partials/index',
-                controller: 'IndexCtrl', resolve: {
+                label: 'index'
+            })
+            .when('/leaderboard', {
+                templateUrl: 'partials/leaderboard',
+                controller: 'LeaderboardCtrl', resolve: {
                     contestants: function ($q, Contestant) {
                         var d = $q.defer();
-
                         Contestant.query(function (contestants) {
                             d.resolve(contestants);
                         });
-                        //$route.current.params.id
                         return d.promise;
                     }
                 },
-                label: 'index'
+                label: 'leaderboard'
             })
             .when('/chart', {
-                templateUrl: 'partials/index',
+                templateUrl: 'partials/chart',
                 controller: 'HistoryCtrl',
                 label: 'charts'
             })

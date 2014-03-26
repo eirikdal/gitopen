@@ -1,18 +1,26 @@
-extends layout
 block body
     div(class="alert alert-block alert-{{flash.get().type}}",ng-show="flash.get().body")
         h4 {{flash.get().title}}
         p {{flash.get().body}}
 
     div(class="container")
-        div(class="row")
-            div(class="span9")
-                h5 GitOpen 2013
+        h1 GitOpen
+
+        nav(class="navbar navbar-default",role="navigation")
+            ul(class="nav navbar-nav")
+                li
+                    a(href="#/") Home
+                li
+                    a(href="#/chart") Charts
+                li
+                    a(href="#/leaderboard") Leaderboard
+
         div(ng-view, ng-animate="{enter: 'view-enter', leave: 'view-leave'}")
 
     script(src='components/jquery/dist/jquery.js')
     script(src='components/angular/angular.js')
     script(src="http://code.highcharts.com/highcharts.js")
+    script(src="http://code.highcharts.com/highcharts-more.js")
     script(src="/components/highcharts-ng/dist/highcharts-ng.js")
     script(src='components/angular-route/angular-route.js')
     script(src='components/angular-resource/angular-resource.js')
@@ -25,4 +33,6 @@ block body
     script(src='js/directives.js')
     script(src='components/underscore/underscore.js')
     script(src='http://code.jquery.com/ui/1.9.2/jquery-ui.js')
+    script(src='components/ng-breadcrumbs/dist/js/ng-breadcrumbs.js')
 
+extends layout

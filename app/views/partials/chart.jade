@@ -1,0 +1,15 @@
+nav(class="navbar navbar-default",role="navigation")
+    div(class="navbar-header")
+        a(class="navbar-brand") Velg år
+    form(role="search", class="navbar-form navbar-left")
+        div(class="form-group")
+            select(id="dropdown-year", class="input-sm form-control", ng-model="year", ng-options="year for year in [2014,2013,2012,2011,2010]")
+    div(class="navbar-header")
+        a(class="navbar-brand") Velg graf
+    form(role="search", class="navbar-form navbar-left")
+        div(class="form-group")
+            select(id="dropdown-chart", class="input-sm form-control", ng-model="chart", ng-options="chart for chart in ['Bubble', 'Spline']")
+div(class="row")
+    div(class="span9")
+        h6(class="widget-title")
+            highchart(id="chart1",config="chartConfig")
