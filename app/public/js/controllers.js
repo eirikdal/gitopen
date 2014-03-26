@@ -7,7 +7,7 @@ Date.prototype.getWeek = function() {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 };
 
-angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
+angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng-breadcrumbs']).
     controller('IndexCtrl',function ($scope, socket, flash, contestants, Commit) {
         var updateScore = function(contestant) {
             var query = {id: contestant._id, search:"committer"};
@@ -39,7 +39,8 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             socket.removeAllListeners();
         });
     })
-    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla, Repository, bubbleChartConfig) {
+    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla, Repository, bubbleChartConfig, breadcrumbs) {
+        $scope.breadcrumbs = breadcrumbs;
         $scope.chartSeries = [
             {
                 "name": "Commits",
@@ -50,32 +51,30 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
         $scope.chartConfig.series = $scope.chartSeries;
 
         Repository.query(function(repositories) {
-            var repos = _.map(repositories, function(rep) { return rep.name; });
+            var repos = _.map(repositories, function(rep) { return rep.name; }),
+                categories = _.map(repos, function(r) { return r.split('\\').reverse()[1]; });
+
             $scope.repositories = repos;
-            $scope.chartConfig.yAxis.categories = repos;
+            $scope.chartConfig.yAxis.categories = categories;
         });
 
         var queryBugzilla = function() {
-            Bugzilla.query(function(bugzilla) {
-                var test2 = _.map(bugzilla, function(val) {
-                    return val.Timeforbruk;
-                });
-                $scope.chartConfig.series[1].data = test2;
-            });
+//            Bugzilla.query(function(bugzilla) {
+//                var test2 = _.map(bugzilla, function(val) {
+//                    return val.Timeforbruk;
+//                });
+//                $scope.chartConfig.series[1].data = test2;
+//            });
         };
 
         function refresh(repositories, year) {
             $scope.chartConfig.series[0].data = [];
 
-            History.query({repository: repositories}, function(test){
-                console.log(test);
+            History.query({repository: repositories}, function(repositories){
+                _.each(repositories, function (repository, idx) {
+                    createBubbleChart(repository, idx, year);
+                })
             })
-//            _.each(repositories, function (repository, idx) {
-//                History.get({"name[]": repository}, function (history) {
-//                                this.createSplineChart(history);
-//                    createBubbleChart(history, idx, year);
-//                })
-//            })
         }
 
         $scope.$watch('year', function(year) {

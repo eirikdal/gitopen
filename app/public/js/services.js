@@ -90,14 +90,13 @@ angular.module('gitopen.services', ['ngResource'])
         {
             options: {
                 chart: {
-                    height: 1024,
                     type: 'bubble',
                     zoomType: 'xy'
                 },
                 plotOptions: {
                     bubble: {
                         minSize:0,
-                        maxSize:"5%"
+                        maxSize:"15%"
                     }
                 },
                 tooltip: {

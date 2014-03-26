@@ -5,7 +5,8 @@ angular.module('gitopen', [
     'gitopen.controllers',
     'gitopen.filters',
     'gitopen.services',
-    'gitopen.directives'
+    'gitopen.directives',
+    'ng-breadcrumbs'
 ]).config(function ($routeProvider, $locationProvider) {
         $routeProvider.when('/', {
                 templateUrl: 'partials/index',
@@ -19,11 +20,13 @@ angular.module('gitopen', [
                         //$route.current.params.id
                         return d.promise;
                     }
-                }
+                },
+                label: 'index'
             })
-            .when('/chart/', {
+            .when('/chart', {
                 templateUrl: 'partials/index',
-                controller: 'HistoryCtrl'
+                controller: 'HistoryCtrl',
+                label: 'charts'
             })
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',
@@ -36,7 +39,8 @@ angular.module('gitopen', [
                         });
                         return d.promise;
                     }
-                }
+                },
+                label: 'commit'
             });
 
         $locationProvider.html5Mode(true);

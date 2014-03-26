@@ -2,15 +2,21 @@ extends layout
 block body
     div(class="container", ng-controller="HistoryCtrl")
         h1 GitOpen
+        ol(class="ab-nab breadcrumb")
+            li(ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path",ng-class="{ active: $last }")
+                a(ng-if="!$last" ng-href="#{{ breadcrumb.path }}",ng-bind="breadcrumb.label",class="margin-right-xs")
+                span(ng-if="$last",ng-bind="breadcrumb.label")
         nav(class="navbar navbar-default",role="navigation")
+            div(class="navbar-header")
+                a(class="navbar-brand") Velg år
             form(role="search", class="navbar-form navbar-left")
                 div(class="form-group")
-                    label(for="dropdown-year") Velg år
-                    select(id="dropdown-year", class="input-sm", ng-model="year", ng-options="year for year in [2014,2013,2012,2011,2010]")
+                    select(id="dropdown-year", class="input-sm form-control", ng-model="year", ng-options="year for year in [2014,2013,2012,2011,2010]")
+            div(class="navbar-header")
+                a(class="navbar-brand") Velg graf
             form(role="search", class="navbar-form navbar-left")
                 div(class="form-group")
-                    label(for="dropdown-chart") Velg graf
-                    select(id="dropdown-chart", class="input-sm", ng-model="chart", ng-options="chart for chart in ['Bubble', 'Spline']")
+                    select(id="dropdown-chart", class="input-sm form-control", ng-model="chart", ng-options="chart for chart in ['Bubble', 'Spline']")
         div(class="row")
             div(class="span9")
                 h6(class="widget-title")
@@ -35,3 +41,4 @@ block body
     script(src='js/directives.js')
     script(src='components/underscore/underscore.js')
     script(src='http://code.jquery.com/ui/1.9.2/jquery-ui.js')
+    script(src='components/ng-breadcrumbs/dist/js/ng-breadcrumbs.js')

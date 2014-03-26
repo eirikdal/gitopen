@@ -13,10 +13,14 @@
     "underscore": "*",
     "bootstrap": "*",
     "toastr": "*",
-    "highcharts-ng": "*"
+    "highcharts-ng": "*",
+    "ng-breadcrumbs": "~0.0.5"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.5",
     "angular-scenario": "~1.0.5"
+  },
+  "resolutions": {
+    "angular": "1.2.15"
   }
 }
