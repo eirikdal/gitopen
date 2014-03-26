@@ -45,30 +45,42 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
                 "name": "Commits",
                 "data": []
             }
-//            {
-//                "name": "Time",
-//                "data": []
-//            }
         ];
-        $scope.repositories = Repository.query();
         $scope.chartConfig = bubbleChartConfig;
         $scope.chartConfig.series = $scope.chartSeries;
+
+        Repository.query(function(repositories) {
+            var repos = _.map(repositories, function(rep) { return rep.name; });
+            $scope.repositories = repos;
+            $scope.chartConfig.yAxis.categories = repos;
+        });
 
         var queryBugzilla = function() {
             Bugzilla.query(function(bugzilla) {
                 var test2 = _.map(bugzilla, function(val) {
                     return val.Timeforbruk;
-                })
+                });
                 $scope.chartConfig.series[1].data = test2;
             });
+        };
+
+        function refresh(repositories, year) {
+            $scope.chartConfig.series[0].data = [];
+
+            History.query({repository: repositories}, function(test){
+                console.log(test);
+            })
+//            _.each(repositories, function (repository, idx) {
+//                History.get({"name[]": repository}, function (history) {
+//                                this.createSplineChart(history);
+//                    createBubbleChart(history, idx, year);
+//                })
+//            })
         }
 
         $scope.$watch('year', function(year) {
             if (year === undefined) return;
-            History.get(function(history) {
-//            this.createSplineChart(history);
-                createBubbleChart(history, 0, year);
-            })
+            refresh($scope.repositories, year);
         });
 
         var createSplineChart = function (history) {
@@ -87,17 +99,18 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters']).
             $scope.chartConfig.series[0].data = weeks;
         };
 
-        var createBubbleChart = function (points, repositoryId, year) {
+        var createBubbleChart = function (points, repositoryId, yearId) {
             var months = [0,0,0,0,0,0,0,0,0,0,0,0];
             _.each(months, function(n, idx) {
-                var month = points.years[year].months[idx+1];
-                if (month === undefined) {
+                var year = points.years[yearId];
+                if (year === undefined) {
                     months[idx] = [idx,repositoryId,0];
                 } else {
-                    months[idx] = [idx,repositoryId,month.commits];
+                    var month = year.months[idx+1];
+                    months[idx] = [idx,repositoryId,month != undefined ? month.commits : 0];
                 }
             });
-            $scope.chartConfig.series[0].data = months;
+            $scope.chartConfig.series[0].data = $scope.chartConfig.series[0].data.concat(months);
         };
 
 

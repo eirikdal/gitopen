@@ -37,9 +37,9 @@ app.get('/clear', routes.clear);
 app.get('/partials/:name', routes.partial);
 app.get('/chart', routes.chart);
 
+app.get('/api/history', api.findAllHistory);
 app.get('/api/repository', api.repositories);
 app.get('/api/bugzilla', api.bugzilla);
-app.get('/api/history', api.history);
 app.get('/api/commit/committer/:id', api.search);
 app.get('/api/contestant', api.findAllContestants);
 app.post('/api/commit', api.addCommit);

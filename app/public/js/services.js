@@ -13,7 +13,7 @@ angular.module('gitopen.services', ['ngResource'])
         return $resource('/api/commit/:search/:id');
     })
     .factory("History", function ($resource) {
-        return $resource('/api/history/:id');
+        return $resource('/api/history/:name');
     })
     .factory("Repository", function($resource) {
         return $resource('/api/repository');
@@ -90,8 +90,15 @@ angular.module('gitopen.services', ['ngResource'])
         {
             options: {
                 chart: {
+                    height: 1024,
                     type: 'bubble',
                     zoomType: 'xy'
+                },
+                plotOptions: {
+                    bubble: {
+                        minSize:0,
+                        maxSize:"5%"
+                    }
                 },
                 tooltip: {
                     crosshairs: [false,false]
@@ -102,7 +109,7 @@ angular.module('gitopen.services', ['ngResource'])
             },
 
             yAxis: {
-                categories:['gitopen', 'foo', 'bar']
+                categories: []
             },
             xAxis: {
                 categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
