@@ -25,25 +25,35 @@ exports.search = function(req, res) {
     });
 };
 
+var getProduct = function(product) {
+    return {
+        'ekrav': 'p.name like \'%ekrav%\' or p.name like \'%Tilskudd-og-trekk%\'',
+        'leveranse': 'p.name like \'%LDB%\' or p.name like \'%Kraftf%\'',
+    }[product];
+};
+
 exports.bugzilla = function(req, res) {
-//    var connection = mysql.createConnection({
-//        host     : 'slfbugzilla.master.no',
-//        user     : 'Steria_les',
-//        password : 'Steria_les',
-//        database: 'bugs'
-//    });
-//
-//    connection.connect();
-//
-//    var sql = 'select WEEK(l.bug_when, 1) as WEEK, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where p.name like \'ekrav%\' and l.bug_when between \'2013-01-01\' and \'2014-01-01\' group by WEEK';
-//    connection.query(sql, function(err, rows, fields) {
-//        if (err) throw err;
-//
-//        res.json(rows);
-//    });
-//
-//    connection.end();
-    res.json([])
+    var connection = mysql.createConnection({
+        host     : 'slfbugzilla.master.no',
+        user     : 'Steria_les',
+        password : 'Steria_les',
+        database: 'bugs'
+    });
+
+    connection.connect();
+
+    var between = 'between \'' + req.query.year + '-01-01\' and \'' + (parseInt(req.query.year)+1) + '-01-01\'',
+        product = getProduct(req.query.id);
+
+    var sql = 'select MONTH(l.bug_when) as MONTH, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by MONTH';
+
+    connection.query(sql, function(err, rows, fields) {
+        if (err) throw err;
+
+        res.json(rows);
+    });
+
+    connection.end();
 };
 
 this.repositories = [];

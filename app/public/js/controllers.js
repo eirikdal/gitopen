@@ -40,13 +40,17 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             socket.removeAllListeners();
         });
     })
-    .controller('SplineChartCtrl', function($scope, History, splineChartConfig, $routeParams, breadcrumbs) {
+    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, breadcrumbs) {
         $scope.breadcrumbs = breadcrumbs;
         $scope.chartConfig = splineChartConfig;
         $scope.chartConfig.series = [
             {
-                "name": "Commits",
+                "name": "Bugzilla",
                 "data": []
+            },
+            {
+                "name": "Commits",
+                data: []
             }
         ];
 
@@ -61,23 +65,25 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
                     months[idx] = [idx,month != undefined ? month.commits : 0];
                 }
             });
-            $scope.chartConfig.series[0].data = $scope.chartConfig.series[0].data.concat(months);
+            $scope.chartConfig.series[1].data = $scope.chartConfig.series[1].data.concat(months);
         };
 
         var refresh = function (repositories, year) {
             $scope.chartConfig.series[0].data = [];
+            $scope.chartConfig.series[1].data = [];
 
             History.get({id: $routeParams.id}, function(repository){
                 createSplineChart(repository, year);
             })
-        };
 
-        var queryBugzilla = function() {
-            Bugzilla.query(function(bugzilla) {
-                var test2 = _.map(bugzilla, function(val) {
-                    return val.Timeforbruk;
+            Bugzilla.query({id: $routeParams.id, year: year}, function(bugzilla) {
+                var months = [0,0,0,0,0,0,0,0,0,0,0,0];
+                var results = _.map(months, function(n, idx) {
+                    var bugzillaMonth = _.find(bugzilla, function(bugz) { return (bugz.MONTH === idx) });
+                    return bugzillaMonth ? [idx, bugzillaMonth.Timeforbruk] : [idx, 0];
                 });
-                $scope.chartConfig.series[1].data = test2;
+
+                $scope.chartConfig.series[0].data = results;
             });
         };
 
