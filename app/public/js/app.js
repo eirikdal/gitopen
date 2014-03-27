@@ -23,7 +23,7 @@ angular.module('gitopen', [
                         return d.promise;
                     }
                 },
-                label: 'leaderboard'
+                label: function(params) { return params.id; }
             })
             .when('/chart', {
                 templateUrl: 'partials/chart',
@@ -50,7 +50,7 @@ angular.module('gitopen', [
                 label: 'commit'
             });
 
-        $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(false);
         $locationProvider.hashPrefix = '!';
     });
 

@@ -9,7 +9,7 @@ var app = require('../app'),
     mongodb = require('../server/mongodb'),
     diff = require('../server/diff.js'),
     finder = require('../server/finder.js'),
-    mysql      = require('mysql'),
+    mysql = require('mysql'),
     async = require('async'),
     S = require('string');
 
@@ -66,6 +66,7 @@ exports.repositories = function(req, res) {
 };
 
 exports.findAllHistory = function(req, res) {
+    if (req.query.repository === undefined) return [];
     async.map(req.query.repository, function(repository, callback) {
         findHistory(repository, callback);
     }, function (err, results) {

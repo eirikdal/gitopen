@@ -40,8 +40,9 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             socket.removeAllListeners();
         });
     })
-    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, breadcrumbs) {
+    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs) {
         $scope.breadcrumbs = breadcrumbs;
+        $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
         $scope.chartConfig.series = [
             {
@@ -89,10 +90,11 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
 
         $scope.$watch('year', function(year) {
             if (year === undefined) return;
+            $rootScope.year = year;
             refresh($scope.repositories, year);
         });
     })
-    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs) {
+    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs, $rootScope) {
         $scope.breadcrumbs = breadcrumbs;
         $scope.chartSeries = [
             {
@@ -105,9 +107,12 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
 
         Repository.query(function(repositories) {
             var repos = _.map(repositories, function(rep) { return rep.name; }),
-                categories = _.map(repos, function(r) { return r.split('/').reverse()[1]; });
+                categories = _.map(repos, function(r) { return r.split('\\').reverse()[1]; });
 
             $scope.repositories = repos;
+            if($rootScope.year != undefined) {
+                refresh($scope.repositories, $rootScope.year);
+            }
             $scope.chartConfig.yAxis.categories = categories;
         });
 
@@ -123,6 +128,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
 
         $scope.$watch('year', function(year) {
             if (year === undefined) return;
+            $rootScope.year = year;
             refresh($scope.repositories, year);
         });
 

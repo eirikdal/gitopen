@@ -85,7 +85,7 @@ angular.module('gitopen.services', ['ngResource'])
         };
     })
     .value('version', '0.1')
-    .factory('bubbleChartConfig', function() {
+    .factory('bubbleChartConfig', function($rootScope) {
         var chart =
         {
             options: {
@@ -113,7 +113,7 @@ angular.module('gitopen.services', ['ngResource'])
                 labels: {
                     formatter: function (value) {
                         var name = this.value;
-                        var url = '<a href="/chart/' + name + '">' + name + '</a>';
+                        var url = '<a href="#/chart/' + name + '">' + name + '</a>';
                         return url;
                     },
                     useHTML: true
