@@ -2,7 +2,8 @@ ol(class="ab-nab breadcrumb")
     li(ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path",ng-class="{ active: $last }")
         a(ng-if="!$last" ng-href="#{{ breadcrumb.path }}",ng-bind="breadcrumb.label",class="margin-right-xs")
         span(ng-if="breadcrumb.label == 'chart'") {{chart}}
-        span(ng-if="$last && breadcrumb.label != 'chart'",ng-bind="breadcrumb.label")
+        span(ng-if="breadcrumb.label == 'month'") {{month}}
+        span(ng-if="$last && breadcrumb.label != 'chart' && breadcrumb.label != 'month'",ng-bind="breadcrumb.label")
 nav(class="navbar navbar-default",role="navigation")
     div(class="navbar-header")
         a(class="navbar-brand") Velg år

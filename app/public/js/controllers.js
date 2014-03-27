@@ -40,7 +40,63 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             socket.removeAllListeners();
         });
     })
-    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs) {
+    .controller('MonthChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location) {
+        $scope.breadcrumbs = breadcrumbs;
+        $scope.month = $routeParams.month;
+        $scope.chart = $routeParams.id;
+        $scope.chartConfig = splineChartConfig;
+        $scope.chartConfig.series = [
+            {
+                "name": "Bugzilla",
+                "data": []
+            },
+            {
+                "name": "Commits",
+                data: []
+            }
+        ];
+
+        //Month is 1 based
+        function daysInMonth(month,year) {
+            return new Date(year, month, 0).getDate();
+        }
+
+        var createSplineChart = function (points, yearId) {
+            var test = [];
+            var days = points.years[yearId].months[$scope.month].days;
+            for (var idx = 1; idx <= daysInMonth(3, 2013); idx++) {
+                var day = days[idx];
+                if (day === undefined) {
+                    test.push(0);
+                } else {
+                    test.push(day.commits);
+                }
+            }
+            $scope.chartConfig.series[1].data = test;//$scope.chartConfig.series[1].data.concat(months);
+        };
+
+        var refresh = function (repositories, year) {
+            $scope.chartConfig.series[0].data = [];
+            $scope.chartConfig.series[1].data = [];
+
+            History.get({id: $routeParams.id, year: $rootScope.year, month: $routeParams.month}, function(repository){
+                createSplineChart(repository, year);
+            })
+
+            Bugzilla.query({id: $routeParams.id, year: year}, function(bugzilla) {
+                var months = [0,0,0,0,0,0,0,0,0,0,0,0];
+                var results = _.map(months, function(n, idx) {
+                    var bugzillaMonth = _.find(bugzilla, function(bugz) { return (bugz.MONTH === idx) });
+                    return bugzillaMonth ? [idx, bugzillaMonth.Timeforbruk] : [idx, 0];
+                });
+
+                $scope.chartConfig.series[0].data = results;
+            });
+        };
+
+        refresh($scope.repositories, $rootScope.year);
+    })
+    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location) {
         $scope.breadcrumbs = breadcrumbs;
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
@@ -60,13 +116,23 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             _.each(months, function(n, idx) {
                 var year = points.years[yearId];
                 if (year === undefined) {
-                    months[idx] = [idx,0];
+                    months[idx] = {
+                        x: idx,
+                        y: 0
+                    }
                 } else {
                     var month = year.months[idx+1];
-                    months[idx] = [idx,month != undefined ? month.commits : 0];
+                    months[idx] = {
+                        y: month != undefined ? month.commits : 0,
+                        events: { click:
+                            function() {
+                                $scope.$apply($location.path('/chart/' + $scope.chart + '/' + (idx+1)));
+                            }
+                        }
+                    }
                 }
             });
-            $scope.chartConfig.series[1].data = $scope.chartConfig.series[1].data.concat(months);
+            $scope.chartConfig.series[1].data = months;//$scope.chartConfig.series[1].data.concat(months);
         };
 
         var refresh = function (repositories, year) {

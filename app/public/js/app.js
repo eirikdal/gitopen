@@ -35,6 +35,11 @@ angular.module('gitopen', [
                 controller: 'SplineChartCtrl',
                 label: 'chart'
             })
+            .when('/chart/:id/:month', {
+                templateUrl: 'partials/chart',
+                controller: 'MonthChartCtrl',
+                label: 'month'
+            })
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',
                 controller: 'CommitCtrl', resolve: {
