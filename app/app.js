@@ -37,6 +37,7 @@ app.get('/clear', routes.clear);
 app.get('/partials/:name', routes.partial);
 
 app.get('/api/history', api.findAllHistory);
+app.get('/api/history/:id', api.findHistory);
 app.get('/api/repository', api.repositories);
 app.get('/api/bugzilla', api.bugzilla);
 app.get('/api/commit/committer/:id', api.search);

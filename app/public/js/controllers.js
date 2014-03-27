@@ -40,7 +40,53 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             socket.removeAllListeners();
         });
     })
-    .controller('HistoryCtrl', function($scope, History, chartConfig, Bugzilla, Repository, bubbleChartConfig, breadcrumbs) {
+    .controller('SplineChartCtrl', function($scope, History, splineChartConfig, $routeParams, breadcrumbs) {
+        $scope.breadcrumbs = breadcrumbs;
+        $scope.chartConfig = splineChartConfig;
+        $scope.chartConfig.series = [
+            {
+                "name": "Commits",
+                "data": []
+            }
+        ];
+
+        var createSplineChart = function (points, yearId) {
+            var months = [0,0,0,0,0,0,0,0,0,0,0,0];
+            _.each(months, function(n, idx) {
+                var year = points.years[yearId];
+                if (year === undefined) {
+                    months[idx] = [idx,0];
+                } else {
+                    var month = year.months[idx+1];
+                    months[idx] = [idx,month != undefined ? month.commits : 0];
+                }
+            });
+            $scope.chartConfig.series[0].data = $scope.chartConfig.series[0].data.concat(months);
+        };
+
+        var refresh = function (repositories, year) {
+            $scope.chartConfig.series[0].data = [];
+
+            History.get({id: $routeParams.id}, function(repository){
+                createSplineChart(repository, year);
+            })
+        };
+
+        var queryBugzilla = function() {
+            Bugzilla.query(function(bugzilla) {
+                var test2 = _.map(bugzilla, function(val) {
+                    return val.Timeforbruk;
+                });
+                $scope.chartConfig.series[1].data = test2;
+            });
+        };
+
+        $scope.$watch('year', function(year) {
+            if (year === undefined) return;
+            refresh($scope.repositories, year);
+        });
+    })
+    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs) {
         $scope.breadcrumbs = breadcrumbs;
         $scope.chartSeries = [
             {
@@ -53,20 +99,11 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
 
         Repository.query(function(repositories) {
             var repos = _.map(repositories, function(rep) { return rep.name; }),
-                categories = _.map(repos, function(r) { return r.split('\\').reverse()[1]; });
+                categories = _.map(repos, function(r) { return r.split('/').reverse()[1]; });
 
             $scope.repositories = repos;
             $scope.chartConfig.yAxis.categories = categories;
         });
-
-        var queryBugzilla = function() {
-//            Bugzilla.query(function(bugzilla) {
-//                var test2 = _.map(bugzilla, function(val) {
-//                    return val.Timeforbruk;
-//                });
-//                $scope.chartConfig.series[1].data = test2;
-//            });
-        };
 
         function refresh(repositories, year) {
             $scope.chartConfig.series[0].data = [];
@@ -83,22 +120,6 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             refresh($scope.repositories, year);
         });
 
-        var createSplineChart = function (history) {
-            var test = _.pairs(history.dates);
-            var weeks = new Array();
-            weeks[0] = 0;
-            _.each(test, function (val) {
-                var week = new Date(val[0]).getWeek() - 1;
-                var number = parseInt(val[1]);
-                if (weeks[week] === undefined) {
-                    weeks[week] = number;
-                } else {
-                    weeks[week] += number;
-                }
-            });
-            $scope.chartConfig.series[0].data = weeks;
-        };
-
         var createBubbleChart = function (points, repositoryId, yearId) {
             var months = [0,0,0,0,0,0,0,0,0,0,0,0];
             _.each(months, function(n, idx) {
@@ -112,9 +133,6 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             });
             $scope.chartConfig.series[0].data = $scope.chartConfig.series[0].data.concat(months);
         };
-
-
-
     })
     .controller('CommitCtrl',function ($scope, $routeParams, socket, flash, commits) {
         socket.on('onCommit', function (data) {

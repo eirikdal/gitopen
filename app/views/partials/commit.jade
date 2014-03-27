@@ -1,17 +1,15 @@
-div(class="row")
-    div(class="span9")
-        h6(class="widget-title") Showing commits for {{ commits[0].committer.name }}
-        table(class="table table-striped")
-            thead
-                tr
-                    th SHA1
-                    th Date
-                    th Message
-                    th Score
-            tbody
-                tr(ng-repeat="commit in commits | orderBy:'-date'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
-                    td {{commit.hash | truncate:20}}
-                    td {{commit.date | date:'MM.dd HH:mm'}}
-                    td
-                       p(ng-bind-html-unsafe="commit.message | bugzilla")
-                    td {{commit.score}}
+h4(class="widget-title") Showing commits for {{ commits[0].committer.name }}
+table(class="table table-striped")
+    thead
+        tr
+            th SHA1
+            th Date
+            th Message
+            th Score
+    tbody
+        tr(ng-repeat="commit in commits | orderBy:'-date'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
+            td {{commit.hash | truncate:20}}
+            td {{commit.date | date:'MM.dd HH:mm'}}
+            td
+               p(ng-bind-html-unsafe="commit.message | bugzilla")
+            td {{commit.score}}

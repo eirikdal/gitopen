@@ -27,8 +27,13 @@ angular.module('gitopen', [
             })
             .when('/chart', {
                 templateUrl: 'partials/chart',
-                controller: 'HistoryCtrl',
+                controller: 'BubbleChartCtrl',
                 label: 'charts'
+            })
+            .when('/chart/:id', {
+                templateUrl: 'partials/chart',
+                controller: 'SplineChartCtrl',
+                label: 'chart'
             })
             .when('/commit/:id', {
                 templateUrl: 'partials/commit',

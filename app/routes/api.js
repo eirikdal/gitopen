@@ -9,8 +9,9 @@ var app = require('../app'),
     mongodb = require('../server/mongodb'),
     diff = require('../server/diff.js'),
     finder = require('../server/finder.js'),
-    mysql      = require('mysql')
-    async = require('async');
+    mysql      = require('mysql'),
+    async = require('async'),
+    S = require('string');
 
 exports.findAllContestants = function (req, res) {
     mongodb.listContestants(function (contestants) {
@@ -45,11 +46,13 @@ exports.bugzilla = function(req, res) {
     res.json([])
 };
 
+this.repositories = [];
+finder.findRepositories("/home/hauk184/workspace", function(repositories){
+    this.repositories = _.map(repositories, function(it) { return {name: it} });
+});
+
 exports.repositories = function(req, res) {
-    finder.findRepositories("C:\\Users\\Eirik\\workspace", function(repositories){
-        var response = _.map(repositories, function(it) { return {name: it} });
-        res.json(response)
-    });
+    res.json(repositories);
 };
 
 exports.findAllHistory = function(req, res) {
@@ -66,8 +69,11 @@ function findHistory(repositoryId, callback) {
         callback(null, activeDays);
     });
 }
-exports.history = function(req, res) {
-    res.json(findHistory(req.query.repository));
+exports.findHistory = function(req, res) {
+    var dir = _.find(repositories, function(r) { return S(r.name).endsWith(req.params.id + "/.git"); });
+    findHistory(dir.name, function(err, result) {
+        res.json(result);
+    });
 };
 
 exports.addCommit = function(req, res) {

@@ -13,7 +13,7 @@ angular.module('gitopen.services', ['ngResource'])
         return $resource('/api/commit/:search/:id');
     })
     .factory("History", function ($resource) {
-        return $resource('/api/history/:name');
+        return $resource('/api/history/:id');
     })
     .factory("Repository", function($resource) {
         return $resource('/api/repository');
@@ -90,13 +90,14 @@ angular.module('gitopen.services', ['ngResource'])
         {
             options: {
                 chart: {
+                    height: 800,
                     type: 'bubble',
                     zoomType: 'xy'
                 },
                 plotOptions: {
                     bubble: {
                         minSize:0,
-                        maxSize:"15%"
+                        maxSize:"5%"
                     }
                 },
                 tooltip: {
@@ -108,7 +109,15 @@ angular.module('gitopen.services', ['ngResource'])
             },
 
             yAxis: {
-                categories: []
+                categories: [],
+                labels: {
+                    formatter: function (value) {
+                        var name = this.value;
+                        var url = '<a href="/chart/' + name + '">' + name + '</a>';
+                        return url;
+                    },
+                    useHTML: true
+                }
             },
             xAxis: {
                 categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
@@ -116,7 +125,7 @@ angular.module('gitopen.services', ['ngResource'])
         };
         return chart;
     })
-    .factory('chartConfig', function() {
+    .factory('splineChartConfig', function() {
             var chart =
             {
                 options: {
@@ -133,12 +142,10 @@ angular.module('gitopen.services', ['ngResource'])
 
                 yAxis: {
                     min: 0,
-                    max: 400
+                    max: 150
                 },
                 xAxis: {
-                    type: "number",
-                    min: 0,
-                    max: 52
+                    categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
                 }
             };
         return chart;
