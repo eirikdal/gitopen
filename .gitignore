@@ -4,3 +4,4 @@ dist
 .sass-cache
 /app/public/components
 .idea/
+app/config

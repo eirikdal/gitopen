@@ -6,5 +6,5 @@ table(class="table table-striped")
     tbody
         tr(ng-repeat="contestant in contestants | orderBy:'score'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
             td
-               a(href="/commit/{{contestant._id}}") {{contestant.name}}
+               a(href="#/commit/{{contestant._id}}") {{contestant.name}}
             td {{contestant.score}}

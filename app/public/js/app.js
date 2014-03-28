@@ -56,7 +56,7 @@ angular.module('gitopen', [
             });
 
         $locationProvider.html5Mode(false);
-        $locationProvider.hashPrefix = '!';
+        $locationProvider.hashPrefix = '#';
     });
 
 /*

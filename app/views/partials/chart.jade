@@ -1,8 +1,10 @@
 ol(class="ab-nab breadcrumb")
-    li(ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path",ng-class="{ active: $last }")
-        a(ng-if="!$last" ng-href="#{{ breadcrumb.path }}",ng-bind="breadcrumb.label",class="margin-right-xs")
-        span(ng-if="breadcrumb.label == 'chart'") {{chart}}
-        span(ng-if="breadcrumb.label == 'month'") {{month}}
+    li(ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path", ng-class="{ active: $last }")
+        a(ng-if="!$last && breadcrumb.label != 'chart' && breadcrumb.label != 'month'", ng-href="\#{{ breadcrumb.path }}", ng-bind="breadcrumb.label", class="margin-right-xs")
+        a(ng-if="!$last && breadcrumb.label == 'chart'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{chart}}
+        a(ng-if="!$last && breadcrumb.label == 'month'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{month | monthify }}
+        span(ng-if="$last && breadcrumb.label == 'chart'") {{chart }}
+        span(ng-if="$last && breadcrumb.label == 'month'") {{month | monthify }}
         span(ng-if="$last && breadcrumb.label != 'chart' && breadcrumb.label != 'month'",ng-bind="breadcrumb.label")
 nav(class="navbar navbar-default",role="navigation")
     div(class="navbar-header")
@@ -18,4 +20,4 @@ nav(class="navbar navbar-default",role="navigation")
 div(class="row")
     div(class="span9")
         h6(class="widget-title")
-            highchart(id="chart1",config="chartConfig")
+            highchart(id="chart1", config="chartConfig")

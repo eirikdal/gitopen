@@ -3,6 +3,7 @@
  */
 var app = require('../app'),
     url = require('url'),
+    config = require('../config.js'),
     Repo = require('git-tools'),
     path = require('path'),
     _ = require('underscore'),
@@ -33,19 +34,27 @@ var getProduct = function(product) {
 };
 
 exports.bugzilla = function(req, res) {
-    var connection = mysql.createConnection({
-        host     : 'slfbugzilla.master.no',
-        user     : 'Steria_les',
-        password : 'Steria_les',
-        database: 'bugs'
-    });
+    var month = req.query.month,
+        year = req.query.year,
+        connection = mysql.createConnection(config.dataSource.bugzilla);
 
     connection.connect();
 
-    var between = 'between \'' + req.query.year + '-01-01\' and \'' + (parseInt(req.query.year)+1) + '-01-01\'',
-        product = getProduct(req.query.id);
+    var between, product;
+    if (month === undefined){
+        between = 'between \'' + year + '-01-01\' and \'' + (parseInt(year)+1) + '-01-01\'';
+    } else {
+        between = 'between \'' + year + '-' + month + '-01\' and \'' + year + '-' + (parseInt(month)+1) + '-01\'';
+    }
 
-    var sql = 'select MONTH(l.bug_when) as MONTH, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by MONTH';
+    product = getProduct(req.query.id);
+    if (product === undefined) {
+        connection.end();
+        res.json([]);
+    }
+
+    var groupBy = month === undefined ? "MONTH" : "DAY";
+    var sql = 'select ' + groupBy + '(l.bug_when) as ' + groupBy + ', sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by ' + groupBy;
 
     connection.query(sql, function(err, rows, fields) {
         if (err) throw err;
@@ -57,7 +66,7 @@ exports.bugzilla = function(req, res) {
 };
 
 this.repositories = [];
-finder.findRepositories("/home/hauk184/workspace", function(repositories){
+finder.findRepositories(config.workspace, function(repositories){
     this.repositories = _.map(repositories, function(it) { return {name: it} });
 });
 
@@ -81,7 +90,7 @@ function findHistory(repositoryId, callback) {
     });
 }
 exports.findHistory = function(req, res) {
-    var dir = _.find(repositories, function(r) { return S(r.name).endsWith(req.params.id + "/.git"); });
+    var dir = _.find(repositories, function(r) { return S(r.name).endsWith(req.params.id + config.envSep + ".git"); });
     findHistory(dir.name, function(err, result) {
         res.json(result);
     });
