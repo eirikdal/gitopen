@@ -91,9 +91,10 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('bubbleChartConfig', function($rootScope) {
         var chart =
         {
+            exporting: {enabled: true},
             options: {
                 chart: {
-                    height: 800,
+                    height: 600,
                     type: 'bubble',
                     zoomType: 'xy'
                 },
@@ -128,6 +129,7 @@ angular.module('gitopen.services', ['ngResource'])
     .factory('splineChartConfig', function() {
             var chart =
             {
+                exporting: {enabled: true},
                 options: {
                     chart: {
                         type: 'areaspline'
