@@ -43,6 +43,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
     .controller('MonthChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale) {
         $scope.months = $locale.DATETIME_FORMATS.MONTH;
         $scope.breadcrumbs = breadcrumbs;
+        $scope.breadcrumbs.generateBreadcrumbs();
         $scope.dateParams = dateParams;
         $scope.dateParams.year = _.find(dateParams.years, function(y) { return y === $routeParams.year});
         $scope.dateParams.month = $scope.months.indexOf($scope.months[parseInt($routeParams.month)]);
@@ -126,8 +127,10 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
     .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location, dateParams, $locale) {
         $scope.dateParams = dateParams;
         $scope.breadcrumbs = breadcrumbs;
-        $scope.dateParams.year = $routeParams.year;
-        $scope.dateParams.month = $routeParams.month;
+        $scope.breadcrumbs.generateBreadcrumbs();
+        $scope.months = $locale.DATETIME_FORMATS.MONTH;
+        $scope.dateParams.year = _.find(dateParams.years, function(y) { return y === $routeParams.year});
+        $scope.dateParams.month = null;
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
         $scope.chartConfig.xAxis.categories = $locale.DATETIME_FORMATS.MONTH;
@@ -197,6 +200,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
         $scope.dateParams = dateParams;
         $scope.dateParams.month = $routeParams.month;
         $scope.breadcrumbs = breadcrumbs;
+        $scope.breadcrumbs.generateBreadcrumbs();
         $scope.chartSeries = [
             {
                 "name": "Commits",
