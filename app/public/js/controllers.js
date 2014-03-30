@@ -131,9 +131,9 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
                 for (var idx = 1; idx <= daysInMonth(month, year); idx++) {
                     var day = _.find(bugzilla, function(day) { return day.DAY === idx; });
                     if (day === undefined) {
-                        days.push(0)
+                        days.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), 0]);
                     } else {
-                        days.push(day.Timeforbruk);
+                        days.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), day.Timeforbruk]);
                     }
                 }
                 $scope.chartConfig.series[0].data = days;
