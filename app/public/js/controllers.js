@@ -155,7 +155,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
         $scope.dateParams.month = null;
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
-        $scope.chartConfig.xAxis.categories = $locale.DATETIME_FORMATS.MONTH;
+        $scope.chartConfig.xAxis = {categories: $locale.DATETIME_FORMATS.MONTH};
         $scope.chartConfig.series = [
             {
                 "name": "Bugzilla",

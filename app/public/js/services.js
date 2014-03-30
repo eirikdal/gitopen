@@ -110,7 +110,7 @@ angular.module('gitopen.services', ['ngResource'])
             title: {
                 text: 'Commits'
             },
-
+            xAxis: {},
             yAxis: {
                 categories: [],
                 labels: {
@@ -139,12 +139,9 @@ angular.module('gitopen.services', ['ngResource'])
                 title: {
                     text: 'Commits'
                 },
-
+                xAxis: {},
                 yAxis: {
                     min: 0
-                },
-                xAxis: {
-                    categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
                 }
             };
         return chart;
