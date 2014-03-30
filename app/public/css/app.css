@@ -85,3 +85,7 @@
     top: -50px;
     height: 0px;
 }
+
+.breadcrumb {
+    border: 1px solid #e7e7e7;
+}
