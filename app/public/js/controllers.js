@@ -7,6 +7,18 @@ Date.prototype.getWeek = function() {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 };
 
+Highcharts.dateFormats = {
+    W: function (timestamp) {
+        var date = new Date(timestamp),
+            day = date.getUTCDay() == 0 ? 7 : date.getUTCDay(),
+            dayNumber;
+        date.setDate(date.getUTCDate() + 4 - day);
+        dayNumber = Math.floor((date.getTime() - new Date(date.getUTCFullYear(), 0, 1, -6)) / 86400000);
+        return 1 + Math.floor(dayNumber / 7);
+
+    }
+};
+
 angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 'gitopen.filters', 'ng-breadcrumbs']).
     controller('LeaderboardCtrl',function ($scope, socket, flash, contestants, Commit, breadcrumbs) {
         $scope.breadcrumbs = breadcrumbs;
@@ -40,7 +52,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
             socket.removeAllListeners();
         });
     })
-    .controller('MonthChartCtrl', function($scope, History, Entries, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale) {
+    .controller('MonthChartCtrl', function($scope, History, Entries, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale, $location) {
         $scope.months = $locale.DATETIME_FORMATS.MONTH;
         $scope.breadcrumbs = breadcrumbs;
         $scope.breadcrumbs.generateBreadcrumbs();
@@ -50,6 +62,17 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
         $scope.chartConfig.xAxis.categories = [];
+        $scope.chartConfig.xAxis.dateTimeLabelFormats = {
+            week: '%e. %b'
+        };
+        $scope.chartConfig.xAxis.type = 'datetime';
+        $scope.chartConfig.xAxis.tickInterval = 7 * 24 * 36e5;
+        $scope.chartConfig.xAxis.labels = {
+            format: 'Uke {value:%W}',
+                rotation: -45,
+                y: 30,
+                align: 'center'
+        }
         $scope.chartConfig.series = [
             {
                 "name": "Bugzilla",
@@ -83,9 +106,9 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
                 var days = m.days;
                 var day = days[idx];
                 if (day === undefined) {
-                    month.push(0);
+                    month.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), 0]);
                 } else {
-                    month.push(day.commits);
+                    month.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), day.commits]);
                 }
             }
             $scope.chartConfig.series[1].data = month;//$scope.chartConfig.series[1].data.concat(months);
@@ -119,13 +142,8 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
 
         refresh($scope.dateParams.year, $scope.dateParams.month);
 
-        $scope.updateMonth = function(index) {
-            console.log(index)
-        }
-
         $scope.$watch('dateParams', function(x) {
-            if (x.year === undefined || x.month === undefined) return;
-            refresh(x.year, x.month);
+            $location.path('/chart/' + $scope.chart + '/' + x.year + '/' + x.month);
         }, true);
     })
     .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location, dateParams, $locale) {

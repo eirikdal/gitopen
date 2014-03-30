@@ -40,15 +40,27 @@ exports.entries = function(req, res) {
     ]);
 };
 
+process.on("uncaughtException", function(err) {
+    console.log(err);
+});
+
 exports.bugzillaWithMonth = function(req, res) {
     var month = req.params.month,
         year = req.params.year,
+        connection = mysql.createConnection(config.dataSource.bugzilla),
         product = req.params.product,
         between,
         sql;
 
     between = 'between \'' + year + '-' + month + '-01\' and \'' + year + '-' + (parseInt(month)+1) + '-01\'';
     sql = 'select DAY(l.bug_when) as DAY, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by DAY';
+
+    connection.connect(function(err){
+        console.log(err.code)
+        res.status(500);
+        res.json({error: err});
+        return;
+    });
 
     if (product === undefined || year === undefined || month === undefined) {
         connection.end();
@@ -70,7 +82,11 @@ exports.bugzilla = function(req, res) {
         connection = mysql.createConnection(config.dataSource.bugzilla),
         sql, between;
 
-    connection.connect();
+    connection.connect(function(err){
+        res.status(500);
+        res.json({error: err});
+        return;
+    });
 
     between = 'between \'' + year + '-01-01\' and \'' + (parseInt(year)+1) + '-01-01\'';
     if (product === undefined || year === undefined) {

@@ -100,7 +100,7 @@ angular.module('gitopen.services', ['ngResource'])
                 plotOptions: {
                     bubble: {
                         minSize:0,
-                        maxSize:"5%"
+                        maxSize:"10%"
                     }
                 },
                 tooltip: {
@@ -141,8 +141,7 @@ angular.module('gitopen.services', ['ngResource'])
                 },
 
                 yAxis: {
-                    min: 0,
-                    max: 150
+                    min: 0
                 },
                 xAxis: {
                     categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
