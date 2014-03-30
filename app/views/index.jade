@@ -6,13 +6,13 @@ block body
     div(class="container")
         h1 GitOpen
 
-        nav(class="navbar navbar-default",role="navigation")
+        nav(class="navbar navbar-default", role="navigation", ng-controller="NavbarController")
             ul(class="nav navbar-nav")
-                li
+                li(ng-class="{ active: isActive('/')}")
                     a(href="#/") Home
-                li
+                li(ng-class="{ active: isActive('/chart')}")
                     a(href="#/chart") Charts
-                li
+                li(ng-class="{ active: isActive('/leaderboard')}")
                     a(href="#/leaderboard") Leaderboard
 
         div(ng-view, ng-animate="{enter: 'view-enter', leave: 'view-leave'}")

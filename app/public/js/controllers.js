@@ -293,4 +293,13 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
         });
 
         $scope.commits = commits;
+    })
+    .controller('NavbarController', function($scope, $location) {
+        $scope.isActive = function (viewLocation) {
+            if (viewLocation === '/') {
+                return $location.path() === viewLocation;
+            } else {
+                return $location.path().indexOf(viewLocation) > -1;
+            }
+        };
     });
