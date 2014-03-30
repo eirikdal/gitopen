@@ -94,21 +94,21 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
             for (var idx = 1; idx <= daysInMonth($scope.dateParams.month, $scope.dateParams.year); idx++) {
                 var year = points.years[yearId];
                 if (year === undefined) {
-                    month.push(0);
+                    month.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), 0]);
                     continue;
                 }
                 var m = year.months[$scope.dateParams.month];
                 if (m === undefined) {
-                    month.push(0);
+                    month.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), 0]);
                     continue;
                 }
 
                 var days = m.days;
                 var day = days[idx];
                 if (day === undefined) {
-                    month.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), 0]);
+                    month.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), 0]);
                 } else {
-                    month.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), day.commits]);
+                    month.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), day.commits]);
                 }
             }
             $scope.chartConfig.series[1].data = month;//$scope.chartConfig.series[1].data.concat(months);
@@ -131,9 +131,9 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
                 for (var idx = 1; idx <= daysInMonth(month, year); idx++) {
                     var day = _.find(bugzilla, function(day) { return day.DAY === idx; });
                     if (day === undefined) {
-                        days.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), 0]);
+                        days.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), 0]);
                     } else {
-                        days.push([Date.UTC($scope.dateParams.year, $scope.dateParams.month-1, idx-1), day.Timeforbruk]);
+                        days.push([Date.UTC(parseInt($scope.dateParams.year), $scope.dateParams.month-1, idx), day.Timeforbruk]);
                     }
                 }
                 $scope.chartConfig.series[0].data = days;
