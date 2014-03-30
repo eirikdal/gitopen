@@ -9,7 +9,9 @@ angular.module('gitopen.filters', [])
         }
     })
     .filter('monthify', function ($locale) {
-        return function (monthNo) { return $locale.DATETIME_FORMATS.MONTH[monthNo-1]; }
+        return function (monthNo) {
+            return $locale.DATETIME_FORMATS.MONTH[monthNo-1];
+        }
     })
     .filter('truncate', function () {
         return function (text, length, end) {

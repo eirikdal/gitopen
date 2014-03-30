@@ -1,22 +1,24 @@
 ol(class="ab-nab breadcrumb")
     li(ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path", ng-class="{ active: $last }")
         a(ng-if="!$last && breadcrumb.label != 'chart' && breadcrumb.label != 'month'", ng-href="\#{{ breadcrumb.path }}", ng-bind="breadcrumb.label", class="margin-right-xs")
-        a(ng-if="!$last && breadcrumb.label == 'chart'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{chart}}
+        a(ng-if="!$last && breadcrumb.label == 'chart'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{chart}} / {{ dateParams.year }}
         a(ng-if="!$last && breadcrumb.label == 'month'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{month | monthify }}
-        span(ng-if="$last && breadcrumb.label == 'chart'") {{chart }}
-        span(ng-if="$last && breadcrumb.label == 'month'") {{month | monthify }}
+        a(ng-if="!$last && breadcrumb.label == 'year'", ng-href="\#{{ breadcrumb.path }}", class="margin-right-xs") {{year}}
+        span(ng-if="$last && breadcrumb.label == 'chart'") {{chart }} / {{ dateParams.year }}
+        span(ng-if="$last && breadcrumb.label == 'month'") {{ dateParams.month | monthify }}
+        span(ng-if="$last && breadcrumb.label == 'year'") {{year}}
         span(ng-if="$last && breadcrumb.label != 'chart' && breadcrumb.label != 'month'",ng-bind="breadcrumb.label")
 nav(class="navbar navbar-default",role="navigation")
     div(class="navbar-header")
         a(class="navbar-brand") Velg år
     form(role="search", class="navbar-form navbar-left")
         div(class="form-group")
-            select(id="dropdown-year", class="input-sm form-control", ng-model="year", ng-options="year for year in [2014,2013,2012,2011,2010]")
-    div(class="navbar-header")
-        a(class="navbar-brand") Velg graf
-    form(role="search", class="navbar-form navbar-left")
+            select(id="dropdown-year", class="input-sm form-control", ng-model="dateParams.year", ng-options="year for year in dateParams.years")
+    div(class="navbar-header", ng-if="dateParams.month")
+        a(class="navbar-brand") Velg måned
+    form(role="search", class="navbar-form navbar-left", ng-if="dateParams.month")
         div(class="form-group")
-            select(id="dropdown-chart", class="input-sm form-control", ng-model="chart", ng-options="chart for chart in ['Bubble', 'Spline']")
+            select(id="dropdown-month", class="input-sm form-control", ng-model="dateParams.month", ng-options="months.indexOf(month)+1 as month for month in months")
 div(class="row")
     div(class="span9")
         h6(class="widget-title")

@@ -7,7 +7,7 @@ Date.prototype.getWeek = function() {
     return Math.ceil((((this - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 };
 
-angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng-breadcrumbs']).
+angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 'gitopen.filters', 'ng-breadcrumbs']).
     controller('LeaderboardCtrl',function ($scope, socket, flash, contestants, Commit, breadcrumbs) {
         $scope.breadcrumbs = breadcrumbs;
         var updateScore = function(contestant) {
@@ -40,11 +40,15 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             socket.removeAllListeners();
         });
     })
-    .controller('MonthChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $locale) {
+    .controller('MonthChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale) {
+        $scope.months = $locale.DATETIME_FORMATS.MONTH;
         $scope.breadcrumbs = breadcrumbs;
-        $scope.month = $routeParams.month;
+        $scope.dateParams = dateParams;
+        $scope.dateParams.year = _.find(dateParams.years, function(y) { return y === $routeParams.year});
+        $scope.dateParams.month = $scope.months.indexOf($scope.months[parseInt($routeParams.month)]);
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
+        $scope.chartConfig.xAxis.categories = [];
         $scope.chartConfig.series = [
             {
                 "name": "Bugzilla",
@@ -62,30 +66,41 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
         }
 
         var createSplineChart = function (points, yearId) {
-            var test = [];
-            var days = points.years[yearId].months[$scope.month].days;
-            for (var idx = 1; idx <= daysInMonth($scope.month, $scope.year); idx++) {
+            var month = [];
+            for (var idx = 1; idx <= daysInMonth($scope.dateParams.month, $scope.dateParams.year); idx++) {
+                var year = points.years[yearId];
+                if (year === undefined) {
+                    month.push(0);
+                    continue;
+                }
+                var m = year.months[$scope.dateParams.month];
+                if (m === undefined) {
+                    month.push(0);
+                    continue;
+                }
+
+                var days = m.days;
                 var day = days[idx];
                 if (day === undefined) {
-                    test.push(0);
+                    month.push(0);
                 } else {
-                    test.push(day.commits);
+                    month.push(day.commits);
                 }
             }
-            $scope.chartConfig.series[1].data = test;//$scope.chartConfig.series[1].data.concat(months);
+            $scope.chartConfig.series[1].data = month;//$scope.chartConfig.series[1].data.concat(months);
         };
 
-        var refresh = function (repositories, year) {
+        var refresh = function (year, month) {
             $scope.chartConfig.series[0].data = [];
             $scope.chartConfig.series[1].data = [];
 
-            History.get({id: $routeParams.id, year: $rootScope.year, month: $routeParams.month}, function(repository){
+            History.get({id: $routeParams.id, year: year, month: month}, function(repository){
                 createSplineChart(repository, year);
             });
 
-            Bugzilla.query({id: $routeParams.id, year: year, month: $scope.month}, function(bugzilla) {
+            Bugzilla.query({id: $routeParams.id, year: year, month: month}, function(bugzilla) {
                 var days = [];
-                for (var idx = 1; idx <= daysInMonth($scope.month, $scope.year); idx++) {
+                for (var idx = 1; idx <= daysInMonth(month, year); idx++) {
                     var day = _.find(bugzilla, function(day) { return day.DAY === idx; });
                     if (day === undefined) {
                         days.push(0)
@@ -97,18 +112,25 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             });
         };
 
-        refresh($scope.repositories, $rootScope.year);
+        refresh($scope.dateParams.year, $scope.dateParams.month);
 
-        $scope.$watch('year', function(year) {
-            if (year === undefined) return;
-            $rootScope.year = year;
-            refresh($scope.repositories, year);
-        });
+        $scope.updateMonth = function(index) {
+            console.log(index)
+        }
+
+        $scope.$watch('dateParams', function(x) {
+            if (x.year === undefined || x.month === undefined) return;
+            refresh(x.year, x.month);
+        }, true);
     })
-    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location) {
+    .controller('SplineChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, $location, dateParams, $locale) {
+        $scope.dateParams = dateParams;
         $scope.breadcrumbs = breadcrumbs;
+        $scope.dateParams.year = $routeParams.year;
+        $scope.dateParams.month = $routeParams.month;
         $scope.chart = $routeParams.id;
         $scope.chartConfig = splineChartConfig;
+        $scope.chartConfig.xAxis.categories = $locale.DATETIME_FORMATS.MONTH;
         $scope.chartConfig.series = [
             {
                 "name": "Bugzilla",
@@ -135,7 +157,7 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
                         y: month != undefined ? month.commits : 0,
                         events: { click:
                             function() {
-                                $scope.$apply($location.path('/chart/' + $scope.chart + '/' + (idx+1)));
+                                $scope.$apply($location.path('/chart/' + $scope.chart + '/' + $rootScope.year + '/' + (idx+1)));
                             }
                         }
                     }
@@ -163,13 +185,17 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             });
         };
 
-        $scope.$watch('year', function(year) {
+        refresh($scope.repositories, $scope.dateParams.year);
+
+        $scope.$watch('dateParams.year', function(year) {
             if (year === undefined) return;
             $rootScope.year = year;
             refresh($scope.repositories, year);
         });
     })
-    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs, $rootScope) {
+    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs, $rootScope, dateParams, $routeParams) {
+        $scope.dateParams = dateParams;
+        $scope.dateParams.month = $routeParams.month;
         $scope.breadcrumbs = breadcrumbs;
         $scope.chartSeries = [
             {
@@ -179,6 +205,16 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
         ];
         $scope.chartConfig = bubbleChartConfig;
         $scope.chartConfig.series = $scope.chartSeries;
+        $scope.chartConfig.yAxis = {
+            labels: {
+                formatter: function (value) {
+                    var name = this.value;
+                    var url = '<a href="#/chart/' + name + '/' + $scope.dateParams.year + '">' + name + '</a>';
+                    return url;
+                },
+                useHTML: true
+            }
+        }
 
         Repository.query(function(repositories) {
             var repos = _.map(repositories, function(rep) { return rep.name; }),
@@ -201,9 +237,8 @@ angular.module('gitopen.controllers', ['gitopen.services', 'gitopen.filters','ng
             })
         }
 
-        $scope.$watch('year', function(year) {
+        $scope.$watch('dateParams.year', function(year) {
             if (year === undefined) return;
-            $rootScope.year = year;
             refresh($scope.repositories, year);
         });
 

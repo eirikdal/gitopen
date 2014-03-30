@@ -118,9 +118,6 @@ angular.module('gitopen.services', ['ngResource'])
                     },
                     useHTML: true
                 }
-            },
-            xAxis: {
-                categories:['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Desember']
             }
         };
         return chart;

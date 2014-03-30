@@ -2,6 +2,7 @@
 
 angular.module('gitopen', [
     "highcharts-ng", 'ngRoute',
+    'gitopen.factories',
     'gitopen.controllers',
     'gitopen.filters',
     'gitopen.services',
@@ -30,12 +31,12 @@ angular.module('gitopen', [
                 controller: 'BubbleChartCtrl',
                 label: 'charts'
             })
-            .when('/chart/:id', {
+            .when('/chart/:id/:year', {
                 templateUrl: 'partials/chart',
                 controller: 'SplineChartCtrl',
                 label: 'chart'
             })
-            .when('/chart/:id/:month', {
+            .when('/chart/:id/:year/:month', {
                 templateUrl: 'partials/chart',
                 controller: 'MonthChartCtrl',
                 label: 'month'
