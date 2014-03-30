@@ -218,7 +218,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
             refresh($scope.repositories, year);
         });
     })
-    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs, $rootScope, dateParams, $routeParams) {
+    .controller('BubbleChartCtrl', function($scope, History, Bugzilla, Repository, bubbleChartConfig, breadcrumbs, $rootScope, dateParams, $routeParams, $locale) {
         $scope.dateParams = dateParams;
         $scope.dateParams.month = $routeParams.month;
         $scope.breadcrumbs = breadcrumbs;
@@ -231,6 +231,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
         ];
         $scope.chartConfig = bubbleChartConfig;
         $scope.chartConfig.series = $scope.chartSeries;
+        $scope.chartConfig.xAxis = {categories: $locale.DATETIME_FORMATS.MONTH};
         $scope.chartConfig.yAxis = {
             labels: {
                 formatter: function (value) {
