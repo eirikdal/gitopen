@@ -36,11 +36,13 @@ app.get('/', routes.index);
 app.get('/clear', routes.clear);
 app.get('/partials/:name', routes.partial);
 
+app.get('/api/entries/:product/:year/:month', api.entries);
 app.get('/api/history', api.findAllHistory);
 app.get('/api/history/:id', api.findHistory);
 app.get('/api/history/:id/:month', api.findHistory);
 app.get('/api/repository', api.repositories);
-app.get('/api/bugzilla', api.bugzilla);
+app.get('/api/bugzilla/:product/:year', api.bugzilla);
+app.get('/api/bugzilla/:product/:year/:month', api.bugzillaWithMonth);
 app.get('/api/commit/committer/:id', api.search);
 app.get('/api/contestant', api.findAllContestants);
 app.post('/api/commit', api.addCommit);

@@ -19,7 +19,10 @@ angular.module('gitopen.services', ['ngResource'])
         return $resource('/api/repository');
     })
     .factory("Bugzilla", function ($resource) {
-        return $resource('/api/bugzilla/:product');
+        return $resource('/api/bugzilla/:product/:year/:month');
+    })
+    .factory("Entries", function($resource) {
+        return $resource('/api/entries/:product/:year/:month')
     })
     .factory("flash", function ($rootScope) {
         var queue = [], currentMessage = {};

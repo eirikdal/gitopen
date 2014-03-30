@@ -23,3 +23,20 @@ div(class="row")
     div(class="span9")
         h6(class="widget-title")
             highchart(id="chart1", config="chartConfig")
+div(class="row", ng-if="entries")
+    div(class="container")
+        h4(class="widget-title") Bugzilla entries
+        table(class="table table-striped")
+            thead
+                tr
+                    th(class="col-sm-1") Dato
+                    th(class="col-sm-1") #Bug
+                    th(class="col-sm-1") Timer
+                    th(class="col-sm-9") Bruker
+            tbody
+                tr(ng-repeat="bugs in entries | orderBy:'-date'",ng-animate="{enter: 'repeat-enter', leave: 'repeat-leave'}")
+                    td {{ bugs.dato }}
+                    th
+                        a(href="{{bugs.url}}") {{ bugs.bug }}
+                    td {{ bugs.timer }}
+                    td {{ bugs.bruker }}

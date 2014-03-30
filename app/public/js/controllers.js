@@ -40,7 +40,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
             socket.removeAllListeners();
         });
     })
-    .controller('MonthChartCtrl', function($scope, History, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale) {
+    .controller('MonthChartCtrl', function($scope, History, Entries, Bugzilla, splineChartConfig, $routeParams, $rootScope, breadcrumbs, dateParams, $locale) {
         $scope.months = $locale.DATETIME_FORMATS.MONTH;
         $scope.breadcrumbs = breadcrumbs;
         $scope.breadcrumbs.generateBreadcrumbs();
@@ -99,7 +99,11 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
                 createSplineChart(repository, year);
             });
 
-            Bugzilla.query({id: $routeParams.id, year: year, month: month}, function(bugzilla) {
+            Entries.query({year: year, month: month, product: $routeParams.id}, function(entries) {
+                $scope.entries = entries;
+            });
+
+            Bugzilla.query({product: $routeParams.id, year: year, month: month}, function(bugzilla) {
                 var days = [];
                 for (var idx = 1; idx <= daysInMonth(month, year); idx++) {
                     var day = _.find(bugzilla, function(day) { return day.DAY === idx; });
@@ -177,7 +181,7 @@ angular.module('gitopen.controllers', ['gitopen.factories', 'gitopen.services', 
                 createSplineChart(repository, year);
             });
 
-            Bugzilla.query({id: $routeParams.id, year: year}, function(bugzilla) {
+            Bugzilla.query({product: $routeParams.id, year: year}, function(bugzilla) {
                 var months = [0,0,0,0,0,0,0,0,0,0,0,0];
                 var results = _.map(months, function(n, idx) {
                     var bugzillaMonth = _.find(bugzilla, function(bugz) { return (bugz.MONTH === idx) });

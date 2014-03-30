@@ -3,7 +3,7 @@
  */
 var app = require('../app'),
     url = require('url'),
-    config = require('../config.js'),
+    config = require('../config/config.js'),
     Repo = require('git-tools'),
     path = require('path'),
     _ = require('underscore'),
@@ -33,29 +33,52 @@ var getProduct = function(product) {
     }[product];
 };
 
-exports.bugzilla = function(req, res) {
-    var month = req.query.month,
-        year = req.query.year,
-        connection = mysql.createConnection(config.dataSource.bugzilla);
+exports.entries = function(req, res) {
+    res.json([
+        {dato: '2014-01-01', bug: "3433", bruker: "Eirik Daleng Haukedal", url: 'http://foo.bar', timer: 9},
+        {dato: '2014-01-02', bug: "3435", bruker: "Eirik Daleng Haukedal", url: 'http://foo.bar', timer: 2}
+    ]);
+};
 
-    connection.connect();
+exports.bugzillaWithMonth = function(req, res) {
+    var month = req.params.month,
+        year = req.params.year,
+        product = req.params.product,
+        between,
+        sql;
 
-    var between, product;
-    if (month === undefined){
-        between = 'between \'' + year + '-01-01\' and \'' + (parseInt(year)+1) + '-01-01\'';
-    } else {
-        between = 'between \'' + year + '-' + month + '-01\' and \'' + year + '-' + (parseInt(month)+1) + '-01\'';
-    }
+    between = 'between \'' + year + '-' + month + '-01\' and \'' + year + '-' + (parseInt(month)+1) + '-01\'';
+    sql = 'select DAY(l.bug_when) as DAY, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by DAY';
 
-    product = getProduct(req.query.id);
-    if (product === undefined) {
+    if (product === undefined || year === undefined || month === undefined) {
         connection.end();
         res.json([]);
     }
 
-    var groupBy = month === undefined ? "MONTH" : "DAY";
-    var sql = 'select ' + groupBy + '(l.bug_when) as ' + groupBy + ', sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by ' + groupBy;
+    connection.query(sql, function(err, rows, fields) {
+        if (err) throw err;
 
+        res.json(rows);
+    });
+
+    connection.end();
+};
+
+exports.bugzilla = function(req, res) {
+    var product = req.params.product,
+        year = req.params.year,
+        connection = mysql.createConnection(config.dataSource.bugzilla),
+        sql, between;
+
+    connection.connect();
+
+    between = 'between \'' + year + '-01-01\' and \'' + (parseInt(year)+1) + '-01-01\'';
+    if (product === undefined || year === undefined) {
+        connection.end();
+        res.json([]);
+    }
+
+    sql = 'select MONTH(l.bug_when) as MONTH, sum(l.work_time) as "Timeforbruk" from bugs b inner join products p on b.product_id=p.id left outer join longdescs l on b.bug_id = l.bug_id inner join profiles u on l.who=u.userid where (' + product + ') and l.bug_when ' + between + ' group by MONTH';
     connection.query(sql, function(err, rows, fields) {
         if (err) throw err;
 
